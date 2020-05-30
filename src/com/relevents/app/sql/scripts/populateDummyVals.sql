@@ -122,13 +122,23 @@ INSERT INTO FAQ (FAQID, QUESTION,EVENTID)
     SELECT * FROM names;
 
 
-INSERT INTO EVENTFOOD (FOODID, FOODNAME, CUISINE, CATERER, EVENTID)
+INSERT INTO EVENTFOOD (FOODID, FOODNAME, CATERER, EVENTID)
     WITH names AS (
-        SELECT 1, 'Pizza', 'Italian', 'Pizza House', 1 FROM dual UNION ALL
-        SELECT 2, 'Hamburger', NULL, 'McDonald', 2 FROM dual UNION ALL
-        SELECT 3, 'Sushi', 'Japanese', 'Sushi House', 3 FROM dual UNION ALL
-        SELECT 4, 'Steak', NULL, 'Steak House', 4 FROM dual UNION ALL
-        SELECT 5, 'Hamburger', NULL, 'KFC', 5 FROM dual
+        SELECT 1, 'Pizza', 'Pizza House', 1 FROM dual UNION ALL
+        SELECT 2, 'Hamburger', 'McDonald', 2 FROM dual UNION ALL
+        SELECT 3, 'Sushi',  'Sushi House', 3 FROM dual UNION ALL
+        SELECT 4, 'Steak', 'Steak House', 4 FROM dual UNION ALL
+        SELECT 5, 'Hamburger', 'KFC', 5 FROM dual
+    )
+    SELECT * FROM names;
+
+INSERT INTO CATERERFOODTYPE (FOODNAME, CUISINE, CATERER)
+    WITH names AS (
+        SELECT 'Pizza', 'Italian', 'Pizza House' FROM dual UNION ALL
+        SELECT  'Hamburger', NULL, 'McDonald' FROM dual UNION ALL
+        SELECT 'Sushi', 'Japanese', 'Sushi House' FROM dual UNION ALL
+        SELECT  'Steak', NULL, 'Steak House' FROM dual UNION ALL
+        SELECT  'Hamburger', NULL, 'KFC' FROM dual
     )
     SELECT * FROM names;
 

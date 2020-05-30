@@ -107,10 +107,16 @@ CREATE TABLE FAQ (
 CREATE TABLE EVENTFOOD (
     foodID integer PRIMARY KEY,
     foodName varchar(20),
-    cuisine varchar(20),
     caterer varchar(20),
     eventID integer NOT NULL,
     FOREIGN KEY (eventID) REFERENCES EVENT
+);
+
+CREATE TABLE CATERERFOODTYPE (
+    foodName varchar(20),
+    cuisine varchar(20),
+    caterer varchar(20),
+    PRIMARY KEY (foodName,caterer)
 );
 
 CREATE TABLE TOPIC (
