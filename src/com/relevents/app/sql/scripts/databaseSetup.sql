@@ -74,7 +74,6 @@ CREATE TABLE GOVERNINGBODY (
 CREATE TABLE EVENT (
     eventID integer PRIMARY KEY,
     eventName varchar(50),
-    eventDate date,
     eventStart timestamp,
     eventEnd timestamp,
     website varchar(50),
