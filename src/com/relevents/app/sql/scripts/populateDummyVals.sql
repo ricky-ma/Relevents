@@ -99,15 +99,28 @@ INSERT INTO GOVERNINGBODY (GOVERNINGID, GOVERNINGNAME, EMAIL, PHONE)
     SELECT * FROM names;
 
 
-INSERT INTO EVENTFAQ (FAQID, QUESTION, ANSWER, EVENTID)
+
+INSERT INTO EVENTQA (QUESTION, ANSWER, EVENTID)
     WITH names AS (
-        SELECT 1, 'How do I contact organzier', 'Email us at OrganizationA@gmail.com', 1 FROM dual UNION ALL
-        SELECT 2, 'How do I contact organzier', 'Email us at OrganizationB@gmail.com', 2 FROM dual UNION ALL
-        SELECT 3, 'How do I contact organzier', 'Email us at OrganizationC@gmail.com', 3 FROM dual UNION ALL
-        SELECT 4, 'How do I contact organzier', 'Email us at OrganizationD@gmail.com', 4 FROM dual UNION ALL
-        SELECT 5, 'How do I contact organzier', 'Email us at OrganizationE@gmail.com', 5 FROM dual
+        SELECT 'How do I contact organzier', 'Email us at OrganizationA@gmail.com', 1 FROM dual UNION ALL
+        SELECT 'How do I contact organzier', 'Email us at OrganizationB@gmail.com', 2 FROM dual UNION ALL
+        SELECT 'How do I contact organzier', 'Email us at OrganizationC@gmail.com', 3 FROM dual UNION ALL
+        SELECT 'How do I contact organzier', 'Email us at OrganizationD@gmail.com', 4 FROM dual UNION ALL
+        SELECT 'How do I contact organzier', 'Email us at OrganizationE@gmail.com', 5 FROM dual
     )
     SELECT * FROM names;
+
+
+INSERT INTO FAQ (FAQID, QUESTION,EVENTID)
+    WITH names AS (
+        SELECT 1, 'How do I contact organzier',  1 FROM dual UNION ALL
+        SELECT 2, 'How do I contact organzier', 2 FROM dual UNION ALL
+        SELECT 3, 'How do I contact organzier', 3 FROM dual UNION ALL
+        SELECT 4, 'How do I contact organzier',  4 FROM dual UNION ALL
+        SELECT 5, 'How do I contact organzier',  5 FROM dual
+    )
+    SELECT * FROM names;
+
 
 INSERT INTO EVENTFOOD (FOODID, FOODNAME, CUISINE, CATERER, EVENTID)
     WITH names AS (
