@@ -19,9 +19,9 @@ CREATE TABLE APPUSER (
     userID integer PRIMARY KEY,
     fname varchar(20),
     lname varchar(20),
-    birthdate varchar(20),
+    birthdate date,
     phone varchar(20),
-    email varchar(20),
+    email varchar(50),
     cityID integer,
     FOREIGN KEY (cityID) REFERENCES CITY
 );
@@ -48,11 +48,19 @@ CREATE TABLE ORGANIZATION (
     website varchar(50)
 );
 
+CREATE TABLE GOVERNINGBODY (
+    governingID integer PRIMARY KEY,
+    governingName varchar(20),
+    email varchar(20),
+    phone varchar(20)
+);
+
 CREATE TABLE EVENT (
     eventID integer PRIMARY KEY,
     eventName varchar(50),
     eventDate date,
-    eventTime timestamp,
+    eventStart timestamp,
+    eventEnd timestamp,
     website varchar(50),
     description varchar(4000),
     governingID integer,
@@ -76,13 +84,6 @@ CREATE TABLE EVENTFOOD (
     FOREIGN KEY (eventID) REFERENCES EVENT
 );
 
-CREATE TABLE GOVERNINGBODY (
-    governingID integer PRIMARY KEY,
-    governingName varchar(20),
-    email varchar(20),
-    phone varchar(20)
-);
-
 CREATE TABLE TOPIC (
     topicName varchar(20) PRIMARY KEY
 );
@@ -96,35 +97,39 @@ CREATE TABLE DESCRIBES (
 );
 
 CREATE TABLE PREFERS (
+    userID integer,
     attendeeID integer,
     topicName varchar(20),
-    FOREIGN KEY (attendeeID) REFERENCES ATTENDEE,
-    FOREIGN KEY (topicName) REFERENCES TOPIC,
+    FOREIGN KEY (attendeeID, userID) REFERENCES ATTENDEE (attendeeID, userID),
+    FOREIGN KEY (topicName) REFERENCES TOPIC (topicName),
     PRIMARY KEY (attendeeID, topicName)
 );
 
 CREATE TABLE FOLLOWS (
+    userID integer,
     attendeeID integer,
-    organizationID varchar(20),
-    FOREIGN KEY (attendeeID) REFERENCES ATTENDEE,
-    FOREIGN KEY (organizationID) REFERENCES ORGANIZATION,
+    organizationID integer,
+    FOREIGN KEY (attendeeID, userID) REFERENCES ATTENDEE (attendeeID, userID),
+    FOREIGN KEY (organizationID) REFERENCES ORGANIZATION (organizationID),
     PRIMARY KEY (attendeeID, organizationID)
 );
 
 CREATE TABLE MANAGES (
+    userID integer,
     organiseeID integer,
     organizationID integer,
     eventID integer,
-    FOREIGN KEY (organiseeID) REFERENCES ORGANISEE,
-    FOREIGN KEY (organizationID) REFERENCES ORGANIZATION,
+    FOREIGN KEY (organiseeID, userID) REFERENCES ORGANISEE (organiseeID, userID),
+    FOREIGN KEY (organizationID) REFERENCES ORGANIZATION (organizationID),
     PRIMARY KEY (organiseeID, organizationID)
 );
 
 CREATE TABLE ATTENDS (
+    userID integer,
     attendeeID integer,
     eventID integer,
-    FOREIGN KEY (attendeeID) REFERENCES ATTENDEE,
-    FOREIGN KEY (eventID) REFERENCES EVENT,
+    FOREIGN KEY (attendeeID, userID) REFERENCES ATTENDEE (attendeeID, userID),
+    FOREIGN KEY (eventID) REFERENCES EVENT (eventID),
     PRIMARY KEY (attendeeID, eventID)
 );
 
