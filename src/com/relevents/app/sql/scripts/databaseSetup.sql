@@ -19,10 +19,20 @@ CREATE TABLE STATEPROVINCE (
 
 CREATE TABLE LOCATION (
     locationID integer PRIMARY KEY,
-    locationName varchar(20),
     unit varchar(20),
     houseNum integer,
+    street varchar(20),
     cityID integer NOT NULL,
+    FOREIGN KEY (cityID) REFERENCES CITY
+);
+
+CREATE TABLE LOCATIONNAME (
+    unit varchar(20),
+    houseNum integer,
+    street varchar(20),
+    cityID integer NOT NULL,
+    locationName varchar(20),
+    PRIMARY KEY (unit,houseNum,street,cityID)
     FOREIGN KEY (cityID) REFERENCES CITY
 );
 
