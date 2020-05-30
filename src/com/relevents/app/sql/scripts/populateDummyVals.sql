@@ -36,5 +36,5 @@ INSERT INTO ORGANISEE (USERID, ORGANISEEID)
         SELECT 1, 4 FROM dual UNION ALL
         SELECT 4, 5 FROM dual
     )
-    SELECT * FROM names;
+    SELECT * FROM names;  
 
