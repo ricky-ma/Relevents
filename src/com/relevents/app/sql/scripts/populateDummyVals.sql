@@ -1,10 +1,50 @@
-INSERT INTO CITY (CITYID, CITYNAME, STATEPROVINCE, COUNTRY, POSTALCODE)
+INSERT INTO CITY (CITYID, COUNTRY, POSTALCODE)
     WITH names AS (
-        SELECT 1, 'Vancouver', 'British Columbia', 'Canada', 'V57 1V4' FROM dual UNION ALL
-        SELECT 2, 'Diamond Bar', 'California', 'United States', '91765' FROM dual UNION ALL
-        SELECT 3, 'Orlando', 'Florida', 'United States', '32825' FROM dual UNION ALL
-        SELECT 4, 'Los Angeles', 'California', 'United States', '90001' FROM dual UNION ALL
-        SELECT 5, 'Richmond', 'British Columbia', 'Canada', 'V3M 0A6' FROM dual
+        SELECT 1, 'Canada', 'V57 1V4' FROM dual UNION ALL
+        SELECT 2,  'United States', '91765' FROM dual UNION ALL
+        SELECT 3,  'United States', '32825' FROM dual UNION ALL
+        SELECT 4,  'United States', '90001' FROM dual UNION ALL
+        SELECT 5, 'Canada', 'V3M 0A6' FROM dual
+    )
+    SELECT * FROM names;
+
+INSERT INTO STATEPROVINCE (POSTALCODE, STATEPROVINCE)
+    WITH names AS (
+        SELECT 1, 'V57 1V4','British Columbia' FROM dual UNION ALL
+        SELECT 2, '91765','California' FROM dual UNION ALL
+        SELECT 3, '32825','Florida' FROM dual UNION ALL
+        SELECT 4, '90001','California' FROM dual UNION ALL
+        SELECT 5, 'V3M 0A6', 'British Columbia' FROM dual
+    )
+    SELECT * FROM names;
+
+INSERT INTO CITYNAME (POSTALCODE, CITYNAME)
+    WITH names AS (
+        SELECT 1,  'V57 1V4','Vancouver' FROM dual UNION ALL
+        SELECT 2,  '91765','Diamond Bar' FROM dual UNION ALL
+        SELECT 3,  '32825','Florida' FROM dual UNION ALL
+        SELECT 4,  '90001','Los Angeles' FROM dual UNION ALL
+        SELECT 5,  'V3M 0A6','Richmond' FROM dual
+    )
+    SELECT * FROM names;
+
+INSERT INTO LOCATION (locationID,unit,houseNum,street,cityID)
+    WITH names AS (
+        SELECT 1,  'unit1','houseNum1','street1',1 FROM dual UNION ALL
+        SELECT 2,  'unit2','houseNum2','street2',2 FROM dual UNION ALL
+        SELECT 3,  'unit3','houseNum3','street3',3 FROM dual UNION ALL
+        SELECT 4,  'unit4','houseNum4','street4',4 FROM dual UNION ALL
+        SELECT 5,  'unit5','houseNum5','street5',5 FROM dual
+    )
+    SELECT * FROM names;
+
+INSERT INTO LOCATIONNAME (unit,houseNum,street,cityID,locationName)
+    WITH names AS (
+        SELECT 'unit1','houseNum1','street1',1,'location1' FROM dual UNION ALL
+        SELECT 'unit2','houseNum2','street2',2,'location2'  FROM dual UNION ALL
+        SELECT 'unit3','houseNum3','street3',3,'location3'  FROM dual UNION ALL
+        SELECT 'unit4','houseNum4','street4',4,'location4'  FROM dual UNION ALL
+        SELECT 'unit5','houseNum5','street5',5,'location5'  FROM dual
     )
     SELECT * FROM names;
 
@@ -59,23 +99,46 @@ INSERT INTO GOVERNINGBODY (GOVERNINGID, GOVERNINGNAME, EMAIL, PHONE)
     SELECT * FROM names;
 
 
-INSERT INTO EVENTFAQ (FAQID, QUESTION, ANSWER, EVENTID)
+
+INSERT INTO EVENTQA (QUESTION, ANSWER, EVENTID)
     WITH names AS (
-        SELECT 1, 'How do I contact organzier', 'Email us at OrganizationA@gmail.com', 1 FROM dual UNION ALL
-        SELECT 2, 'How do I contact organzier', 'Email us at OrganizationB@gmail.com', 2 FROM dual UNION ALL
-        SELECT 3, 'How do I contact organzier', 'Email us at OrganizationC@gmail.com', 3 FROM dual UNION ALL
-        SELECT 4, 'How do I contact organzier', 'Email us at OrganizationD@gmail.com', 4 FROM dual UNION ALL
-        SELECT 5, 'How do I contact organzier', 'Email us at OrganizationE@gmail.com', 5 FROM dual
+        SELECT 'How do I contact organzier', 'Email us at OrganizationA@gmail.com', 1 FROM dual UNION ALL
+        SELECT 'How do I contact organzier', 'Email us at OrganizationB@gmail.com', 2 FROM dual UNION ALL
+        SELECT 'How do I contact organzier', 'Email us at OrganizationC@gmail.com', 3 FROM dual UNION ALL
+        SELECT 'How do I contact organzier', 'Email us at OrganizationD@gmail.com', 4 FROM dual UNION ALL
+        SELECT 'How do I contact organzier', 'Email us at OrganizationE@gmail.com', 5 FROM dual
     )
     SELECT * FROM names;
 
-INSERT INTO EVENTFOOD (FOODID, FOODNAME, CUISINE, CATERER, EVENTID)
+
+INSERT INTO FAQ (FAQID, QUESTION,EVENTID)
     WITH names AS (
-        SELECT 1, 'Pizza', 'Italian', 'Pizza House', 1 FROM dual UNION ALL
-        SELECT 2, 'Hamburger', NULL, 'McDonald', 2 FROM dual UNION ALL
-        SELECT 3, 'Sushi', 'Japanese', 'Sushi House', 3 FROM dual UNION ALL
-        SELECT 4, 'Steak', NULL, 'Steak House', 4 FROM dual UNION ALL
-        SELECT 5, 'Hamburger', NULL, 'KFC', 5 FROM dual
+        SELECT 1, 'How do I contact organzier',  1 FROM dual UNION ALL
+        SELECT 2, 'How do I contact organzier', 2 FROM dual UNION ALL
+        SELECT 3, 'How do I contact organzier', 3 FROM dual UNION ALL
+        SELECT 4, 'How do I contact organzier',  4 FROM dual UNION ALL
+        SELECT 5, 'How do I contact organzier',  5 FROM dual
+    )
+    SELECT * FROM names;
+
+
+INSERT INTO EVENTFOOD (FOODID, FOODNAME, CATERER, EVENTID)
+    WITH names AS (
+        SELECT 1, 'Pizza', 'Pizza House', 1 FROM dual UNION ALL
+        SELECT 2, 'Hamburger', 'McDonald', 2 FROM dual UNION ALL
+        SELECT 3, 'Sushi',  'Sushi House', 3 FROM dual UNION ALL
+        SELECT 4, 'Steak', 'Steak House', 4 FROM dual UNION ALL
+        SELECT 5, 'Hamburger', 'KFC', 5 FROM dual
+    )
+    SELECT * FROM names;
+
+INSERT INTO CATERERFOODTYPE (FOODNAME, CUISINE, CATERER)
+    WITH names AS (
+        SELECT 'Pizza', 'Italian', 'Pizza House' FROM dual UNION ALL
+        SELECT  'Hamburger', NULL, 'McDonald' FROM dual UNION ALL
+        SELECT 'Sushi', 'Japanese', 'Sushi House' FROM dual UNION ALL
+        SELECT  'Steak', NULL, 'Steak House' FROM dual UNION ALL
+        SELECT  'Hamburger', NULL, 'KFC' FROM dual
     )
     SELECT * FROM names;
 

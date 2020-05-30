@@ -1,17 +1,38 @@
+
 CREATE TABLE CITY (
     cityID integer PRIMARY KEY,
-    cityName varchar(20),
-    stateProvince varchar(20),
     country varchar(20),
     postalCode varchar(20)
 );
 
+CREATE TABLE CITYNAME (
+    postalCode varchar(20) PRIMARY KEY,
+    cityName varchar(20)
+
+);
+
+CREATE TABLE STATEPROVINCE (
+    postalCode varchar(20) PRIMARY KEY,
+    stateProvince varchar(20)
+);
+
+
 CREATE TABLE LOCATION (
     locationID integer PRIMARY KEY,
-    locationName varchar(20),
     unit varchar(20),
     houseNum integer,
+    street varchar(20),
     cityID integer NOT NULL,
+    FOREIGN KEY (cityID) REFERENCES CITY
+);
+
+CREATE TABLE LOCATIONNAME (
+    unit varchar(20),
+    houseNum integer,
+    street varchar(20),
+    cityID integer NOT NULL,
+    locationName varchar(20),
+    PRIMARY KEY (unit,houseNum,street,cityID)
     FOREIGN KEY (cityID) REFERENCES CITY
 );
 
@@ -67,10 +88,18 @@ CREATE TABLE EVENT (
     FOREIGN KEY (governingID) REFERENCES GOVERNINGBODY
 );
 
-CREATE TABLE EVENTFAQ (
-    FAQID integer PRIMARY KEY,
+
+CREATE TABLE EVENTQA (
     question varchar(200) NOT NULL,
     answer varchar(200) NOT NULL,
+    eventID integer NOT NULL,
+    FOREIGN KEY (eventID) REFERENCES EVENT
+    PRIMARY KEY (eventID,question)
+);
+
+CREATE TABLE FAQ (
+    FAQID integer PRIMARY KEY,
+    question varchar(200) NOT NULL,
     eventID integer NOT NULL,
     FOREIGN KEY (eventID) REFERENCES EVENT
 );
@@ -78,10 +107,16 @@ CREATE TABLE EVENTFAQ (
 CREATE TABLE EVENTFOOD (
     foodID integer PRIMARY KEY,
     foodName varchar(20),
-    cuisine varchar(20),
     caterer varchar(20),
     eventID integer NOT NULL,
     FOREIGN KEY (eventID) REFERENCES EVENT
+);
+
+CREATE TABLE CATERERFOODTYPE (
+    foodName varchar(20),
+    cuisine varchar(20),
+    caterer varchar(20),
+    PRIMARY KEY (foodName,caterer)
 );
 
 CREATE TABLE TOPIC (
