@@ -1,10 +1,21 @@
+
 CREATE TABLE CITY (
     cityID integer PRIMARY KEY,
-    cityName varchar(20),
-    stateProvince varchar(20),
     country varchar(20),
     postalCode varchar(20)
 );
+
+CREATE TABLE CITYNAME (
+    postalCode varchar(20) PRIMARY KEY,
+    cityName varchar(20)
+
+);
+
+CREATE TABLE STATEPROVINCE (
+    postalCode varchar(20) PRIMARY KEY,
+    stateProvince varchar(20)
+);
+
 
 CREATE TABLE LOCATION (
     locationID integer PRIMARY KEY,
