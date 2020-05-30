@@ -8,7 +8,6 @@ CREATE TABLE CITY (
 CREATE TABLE CITYNAME (
     postalCode varchar(20) PRIMARY KEY,
     cityName varchar(20)
-
 );
 
 CREATE TABLE STATEPROVINCE (
@@ -21,19 +20,15 @@ CREATE TABLE LOCATION (
     locationID integer PRIMARY KEY,
     unit varchar(20),
     houseNum integer,
-    street varchar(20),
+    street varchar(50),
     cityID integer NOT NULL,
     FOREIGN KEY (cityID) REFERENCES CITY
 );
 
 CREATE TABLE LOCATIONNAME (
-    unit varchar(20),
-    houseNum integer,
-    street varchar(20),
-    cityID integer NOT NULL,
+    locationID integer PRIMARY KEY,
     locationName varchar(20),
-    PRIMARY KEY (unit,houseNum,street,cityID)
-    FOREIGN KEY (cityID) REFERENCES CITY
+    FOREIGN KEY (locationID) REFERENCES LOCATION
 );
 
 CREATE TABLE APPUSER (
@@ -65,14 +60,14 @@ CREATE TABLE ORGANIZATION (
     organizationID integer PRIMARY KEY,
     orgName varchar(20),
     description varchar(4000),
-    email varchar(20),
+    email varchar(50),
     website varchar(50)
 );
 
 CREATE TABLE GOVERNINGBODY (
     governingID integer PRIMARY KEY,
     governingName varchar(20),
-    email varchar(20),
+    email varchar(50),
     phone varchar(20)
 );
 
@@ -93,7 +88,7 @@ CREATE TABLE EVENTQA (
     question varchar(200) NOT NULL,
     answer varchar(200) NOT NULL,
     eventID integer NOT NULL,
-    FOREIGN KEY (eventID) REFERENCES EVENT
+    FOREIGN KEY (eventID) REFERENCES EVENT,
     PRIMARY KEY (eventID,question)
 );
 
