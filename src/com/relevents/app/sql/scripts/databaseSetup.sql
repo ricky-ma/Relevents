@@ -1,34 +1,20 @@
 
 CREATE TABLE CITY (
     cityID integer PRIMARY KEY,
+    cityName varchar(20),
+    stateProvince varchar(20),
     country varchar(20),
     postalCode varchar(20)
 );
 
-CREATE TABLE CITYNAME (
-    postalCode varchar(20) PRIMARY KEY,
-    cityName varchar(20)
-);
-
-CREATE TABLE STATEPROVINCE (
-    postalCode varchar(20) PRIMARY KEY,
-    stateProvince varchar(20)
-);
-
-
 CREATE TABLE LOCATION (
     locationID integer PRIMARY KEY,
+    locationName varchar(20),
     unit varchar(20),
     houseNum integer,
     street varchar(50),
     cityID integer NOT NULL,
     FOREIGN KEY (cityID) REFERENCES CITY
-);
-
-CREATE TABLE LOCATIONNAME (
-    locationID integer PRIMARY KEY,
-    locationName varchar(20),
-    FOREIGN KEY (locationID) REFERENCES LOCATION
 );
 
 CREATE TABLE APPUSER (
@@ -100,17 +86,11 @@ CREATE TABLE FAQ (
 
 CREATE TABLE EVENTFOOD (
     foodID integer PRIMARY KEY,
-    foodName varchar(20),
+    foodName varchar(20) NOT NULL,
     caterer varchar(20),
+    cuisine varchar(20),
     eventID integer NOT NULL,
     FOREIGN KEY (eventID) REFERENCES EVENT
-);
-
-CREATE TABLE CATERERFOODTYPE (
-    foodName varchar(20),
-    cuisine varchar(20),
-    caterer varchar(20),
-    PRIMARY KEY (foodName,caterer)
 );
 
 CREATE TABLE TOPIC (
