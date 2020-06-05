@@ -1,52 +1,24 @@
-INSERT INTO CITY (CITYID, COUNTRY, POSTALCODE)
-    WITH names (CITYID, COUNTRY, POSTALCODE) AS (
-        SELECT 1, 'Canada', 'V57 1V4' FROM dual UNION ALL
-        SELECT 2,  'United States', '91765' FROM dual UNION ALL
-        SELECT 3,  'United States', '32825' FROM dual UNION ALL
-        SELECT 4,  'United States', '90001' FROM dual UNION ALL
-        SELECT 5, 'Canada', 'V3M 0A6' FROM dual
+INSERT INTO CITY (CITYID, CITYNAME, STATEPROVINCE, COUNTRY, POSTALCODE)
+    WITH names (CITYID, CITYNAME, STATEPROVINCE, COUNTRY, POSTALCODE) AS (
+        SELECT 1, 'Vancouver', 'British Columbia', 'Canada', 'V57 1V4' FROM dual UNION ALL
+        SELECT 2, 'Diamond Bar', 'California', 'United States', '91765' FROM dual UNION ALL
+        SELECT 3, 'Orlando', 'Florida', 'United States', '32825' FROM dual UNION ALL
+        SELECT 4, 'Los Angeles', 'California', 'United States', '90001' FROM dual UNION ALL
+        SELECT 5, 'Richmond', 'British Columbia', 'Canada', 'V3M 0A6' FROM dual
     )
     SELECT * FROM names;
 
-INSERT INTO STATEPROVINCE (POSTALCODE, STATEPROVINCE)
-    WITH names (POSTALCODE, STATEPROVINCE) AS (
-        SELECT 'V57 1V4','British Columbia' FROM dual UNION ALL
-        SELECT '91765','California' FROM dual UNION ALL
-        SELECT '32825','Florida' FROM dual UNION ALL
-        SELECT '90001','California' FROM dual UNION ALL
-        SELECT 'V3M 0A6', 'British Columbia' FROM dual
+
+INSERT INTO LOCATION (locationid, locationname, unit, housenum, street, cityid)
+    WITH names (locationid, locationname, unit, housenum, street, cityid) AS (
+        SELECT 1, 'location1', '25A', 1345,'street1', 1 FROM dual UNION ALL
+        SELECT 2, 'location2', NULL, 2238,'street2', 2 FROM dual UNION ALL
+        SELECT 3, 'location3', 'C', 56,'street3', 3 FROM dual UNION ALL
+        SELECT 4, 'location4', NULL, 42001,'street4', 4 FROM dual UNION ALL
+        SELECT 5, 'location5', '101', 2190,'street5', 5 FROM dual
     )
     SELECT * FROM names;
 
-INSERT INTO CITYNAME (POSTALCODE, CITYNAME)
-    WITH names (POSTALCODE, CITYNAME) AS (
-        SELECT 'V57 1V4','Vancouver' FROM dual UNION ALL
-        SELECT '91765','Diamond Bar' FROM dual UNION ALL
-        SELECT '32825','Orlando' FROM dual UNION ALL
-        SELECT '90001','Los Angeles' FROM dual UNION ALL
-        SELECT 'V3M 0A6','Richmond' FROM dual
-    )
-    SELECT * FROM names;
-
-INSERT INTO LOCATION (locationid, unit, housenum, street, cityid)
-    WITH names (locationid, unit, housenum, street, cityid) AS (
-        SELECT 1, '25A', 1345,'street1', 1 FROM dual UNION ALL
-        SELECT 2, NULL, 2238,'street2', 2 FROM dual UNION ALL
-        SELECT 3, 'C', 56,'street3', 3 FROM dual UNION ALL
-        SELECT 4, NULL, 42001,'street4', 4 FROM dual UNION ALL
-        SELECT 5, '101', 2190,'street5', 5 FROM dual
-    )
-    SELECT * FROM names;
-
-INSERT INTO LOCATIONNAME (locationid, locationname)
-    WITH names (locationid, locationname) AS (
-        SELECT 1,'location1' FROM dual UNION ALL
-        SELECT 2,'location2'  FROM dual UNION ALL
-        SELECT 3,'location3'  FROM dual UNION ALL
-        SELECT 4,'location4'  FROM dual UNION ALL
-        SELECT 5,'location5'  FROM dual
-    )
-    SELECT * FROM names;
 
 INSERT INTO APPUSER (USERID, FNAME, LNAME, BIRTHDATE, PHONE, EMAIL, CITYID)
     WITH names (USERID, FNAME, LNAME, BIRTHDATE, PHONE, EMAIL, CITYID) AS (
@@ -58,25 +30,6 @@ INSERT INTO APPUSER (USERID, FNAME, LNAME, BIRTHDATE, PHONE, EMAIL, CITYID)
     )
     SELECT * FROM names;
 
-INSERT INTO ATTENDEE (USERID, ATTENDEEID)
-    WITH names (USERID, ATTENDEEID) AS (
-        SELECT 1, 1 FROM dual UNION ALL
-        SELECT 2, 2 FROM dual UNION ALL
-        SELECT 3, 3 FROM dual UNION ALL
-        SELECT 4, 4 FROM dual UNION ALL
-        SELECT 5, 5 FROM dual
-    )
-    SELECT * FROM names;
-
-INSERT INTO ORGANISEE (USERID, ORGANISEEID)
-    WITH names (USERID, ORGANISEEID) AS (
-        SELECT 1, 1 FROM dual UNION ALL
-        SELECT 2, 2 FROM dual UNION ALL
-        SELECT 3, 3 FROM dual UNION ALL
-        SELECT 4, 4 FROM dual UNION ALL
-        SELECT 5, 5 FROM dual
-    )
-    SELECT * FROM names;
 
 INSERT INTO ORGANIZATION (ORGANIZATIONID, ORGNAME, DESCRIPTION, EMAIL, WEBSITE)
     WITH names (ORGANIZATIONID, ORGNAME, DESCRIPTION, EMAIL, WEBSITE) AS (
@@ -131,25 +84,16 @@ INSERT INTO FAQ (FAQID, QUESTION,EVENTID)
     SELECT * FROM names;
 
 
-INSERT INTO EVENTFOOD (FOODID, FOODNAME, CATERER, EVENTID)
-    WITH names (FOODID, FOODNAME, CATERER, EVENTID) AS (
-        SELECT 1, 'Pizza', 'Pizza House', 1 FROM dual UNION ALL
-        SELECT 2, 'Hamburger', 'McDonald', 2 FROM dual UNION ALL
-        SELECT 3, 'Sushi',  'Sushi House', 3 FROM dual UNION ALL
-        SELECT 4, 'Steak', 'Steak House', 4 FROM dual UNION ALL
-        SELECT 5, 'Hamburger', 'KFC', 5 FROM dual
+INSERT INTO EVENTFOOD (FOODID, FOODNAME, CATERER, CUISINE, EVENTID)
+    WITH names (FOODID, FOODNAME, CATERER, CUISINE, EVENTID) AS (
+        SELECT 1, 'Pizza', 'Pizza House', 'Italian', 1 FROM dual UNION ALL
+        SELECT 2, 'Hamburger', 'McDonald', NULL, 2 FROM dual UNION ALL
+        SELECT 3, 'Sushi',  'Sushi House', 'Japanese', 3 FROM dual UNION ALL
+        SELECT 4, 'Steak', 'Steak House', NULL, 4 FROM dual UNION ALL
+        SELECT 5, 'Hamburger', 'KFC', NULL, 5 FROM dual
     )
     SELECT * FROM names;
 
-INSERT INTO CATERERFOODTYPE (FOODNAME, CUISINE, CATERER)
-    WITH names (FOODNAME, CUISINE, CATERER) AS (
-        SELECT 'Pizza', 'Italian', 'Pizza House' FROM dual UNION ALL
-        SELECT  'Hamburger', NULL, 'McDonald' FROM dual UNION ALL
-        SELECT 'Sushi', 'Japanese', 'Sushi House' FROM dual UNION ALL
-        SELECT  'Steak', NULL, 'Steak House' FROM dual UNION ALL
-        SELECT  'Hamburger', NULL, 'KFC' FROM dual
-    )
-    SELECT * FROM names;
 
 INSERT INTO TOPIC (TOPICNAME)
     WITH names (TOPICNAME) AS (
@@ -171,18 +115,28 @@ INSERT INTO DESCRIBES (TOPICNAME, EVENTID)
     )
     SELECT * FROM names;
 
-INSERT INTO PREFERS (USERID, ATTENDEEID, TOPICNAME)
-    WITH names (USERID, ATTENDEEID, TOPICNAME) AS (
-        SELECT 1, 1, 'Art' FROM dual UNION ALL
-        SELECT 2, 2, 'Soccer' FROM dual UNION ALL
-        SELECT 3, 3, 'Music' FROM dual UNION ALL
-        SELECT 4, 4, 'Sports' FROM dual UNION ALL
-        SELECT 5, 5, 'Basketball' FROM dual
+INSERT INTO PREFERS (USERID, TOPICNAME)
+    WITH names (USERID, TOPICNAME) AS (
+        SELECT 1, 'Art' FROM dual UNION ALL
+        SELECT 2, 'Soccer' FROM dual UNION ALL
+        SELECT 3, 'Music' FROM dual UNION ALL
+        SELECT 4, 'Sports' FROM dual UNION ALL
+        SELECT 5, 'Basketball' FROM dual
     )
     SELECT * FROM names;
 
-INSERT INTO FOLLOWS (USERID, ATTENDEEID, ORGANIZATIONID)
-    WITH names (USERID, ATTENDEEID, ORGANIZATIONID) AS (
+INSERT INTO FOLLOWS (USERID, ORGANIZATIONID)
+    WITH names (USERID, ORGANIZATIONID) AS (
+        SELECT 1, 1 FROM dual UNION ALL
+        SELECT 2, 2 FROM dual UNION ALL
+        SELECT 3, 3 FROM dual UNION ALL
+        SELECT 4, 4 FROM dual UNION ALL
+        SELECT 5, 5 FROM dual
+    )
+    SELECT * FROM names;
+
+INSERT INTO MANAGES (USERID, ORGANIZATIONID, EVENTID)
+    WITH names (USERID, ORGANIZATIONID, EVENTID) AS (
         SELECT 1, 1, 1 FROM dual UNION ALL
         SELECT 2, 2, 2 FROM dual UNION ALL
         SELECT 3, 3, 3 FROM dual UNION ALL
@@ -191,23 +145,13 @@ INSERT INTO FOLLOWS (USERID, ATTENDEEID, ORGANIZATIONID)
     )
     SELECT * FROM names;
 
-INSERT INTO MANAGES (USERID, ORGANISEEID, ORGANIZATIONID, EVENTID)
-    WITH names (USERID, ORGANISEEID, ORGANIZATIONID, EVENTID) AS (
-        SELECT 1, 1, 1, 1 FROM dual UNION ALL
-        SELECT 2, 2, 2, 2 FROM dual UNION ALL
-        SELECT 3, 3, 3, 3 FROM dual UNION ALL
-        SELECT 4, 4, 4, 4 FROM dual UNION ALL
-        SELECT 5, 5, 5, 5 FROM dual
-    )
-    SELECT * FROM names;
-
-INSERT INTO ATTENDS (USERID, ATTENDEEID, EVENTID)
-    WITH names (USERID, ATTENDEEID, EVENTID) AS (
-        SELECT 1, 1, 1 FROM dual UNION ALL
-        SELECT 2, 2, 2 FROM dual UNION ALL
-        SELECT 3, 3, 3 FROM dual UNION ALL
-        SELECT 4, 4, 4 FROM dual UNION ALL
-        SELECT 5, 5, 5 FROM dual
+INSERT INTO ATTENDS (USERID, EVENTID)
+    WITH names (USERID, EVENTID) AS (
+        SELECT 1, 1 FROM dual UNION ALL
+        SELECT 2, 2 FROM dual UNION ALL
+        SELECT 3, 3 FROM dual UNION ALL
+        SELECT 4, 4 FROM dual UNION ALL
+        SELECT 5, 5 FROM dual
     )
     SELECT * FROM names;
 

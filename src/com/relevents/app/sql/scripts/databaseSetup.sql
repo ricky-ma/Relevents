@@ -1,4 +1,3 @@
-
 CREATE TABLE CITY (
     cityID integer PRIMARY KEY,
     cityName varchar(20),
@@ -26,20 +25,6 @@ CREATE TABLE APPUSER (
     email varchar(50),
     cityID integer,
     FOREIGN KEY (cityID) REFERENCES CITY
-);
-
-CREATE TABLE ATTENDEE (
-    userID integer,
-    attendeeID integer,
-    FOREIGN KEY (userID) REFERENCES APPUSER,
-    PRIMARY KEY (userID, attendeeID)
-);
-
-CREATE TABLE ORGANISEE (
-    userID integer,
-    organiseeID integer,
-    FOREIGN KEY (userID) REFERENCES APPUSER,
-    PRIMARY KEY (userID, organiseeID)
 );
 
 CREATE TABLE ORGANIZATION (
@@ -107,39 +92,35 @@ CREATE TABLE DESCRIBES (
 
 CREATE TABLE PREFERS (
     userID integer,
-    attendeeID integer,
     topicName varchar(20),
-    FOREIGN KEY (attendeeID, userID) REFERENCES ATTENDEE (attendeeID, userID),
+    FOREIGN KEY (userID) REFERENCES APPUSER (userID),
     FOREIGN KEY (topicName) REFERENCES TOPIC (topicName),
-    PRIMARY KEY (attendeeID, topicName)
+    PRIMARY KEY (userID, topicName)
 );
 
 CREATE TABLE FOLLOWS (
     userID integer,
-    attendeeID integer,
     organizationID integer,
-    FOREIGN KEY (attendeeID, userID) REFERENCES ATTENDEE (attendeeID, userID),
+    FOREIGN KEY (userID) REFERENCES APPUSER (userID),
     FOREIGN KEY (organizationID) REFERENCES ORGANIZATION (organizationID),
-    PRIMARY KEY (attendeeID, organizationID)
+    PRIMARY KEY (userID, organizationID)
 );
 
 CREATE TABLE MANAGES (
     userID integer,
-    organiseeID integer,
     organizationID integer,
     eventID integer,
-    FOREIGN KEY (organiseeID, userID) REFERENCES ORGANISEE (organiseeID, userID),
+    FOREIGN KEY (userID) REFERENCES APPUSER (userID),
     FOREIGN KEY (organizationID) REFERENCES ORGANIZATION (organizationID),
-    PRIMARY KEY (organiseeID, organizationID)
+    PRIMARY KEY (organizationID)
 );
 
 CREATE TABLE ATTENDS (
     userID integer,
-    attendeeID integer,
     eventID integer,
-    FOREIGN KEY (attendeeID, userID) REFERENCES ATTENDEE (attendeeID, userID),
+    FOREIGN KEY (userID) REFERENCES APPUSER (userID),
     FOREIGN KEY (eventID) REFERENCES EVENT (eventID),
-    PRIMARY KEY (attendeeID, eventID)
+    PRIMARY KEY (userID, eventID)
 );
 
 CREATE TABLE HOSTS (
