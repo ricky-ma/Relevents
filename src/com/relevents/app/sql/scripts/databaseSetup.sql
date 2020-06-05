@@ -54,17 +54,10 @@ CREATE TABLE EVENT (
 );
 
 
-CREATE TABLE EVENTQA (
-    question varchar(200) NOT NULL,
-    answer varchar(200) NOT NULL,
-    eventID integer NOT NULL,
-    FOREIGN KEY (eventID) REFERENCES EVENT,
-    PRIMARY KEY (eventID,question)
-);
-
-CREATE TABLE FAQ (
+CREATE TABLE EVENTFAQ (
     FAQID integer PRIMARY KEY,
     question varchar(200) NOT NULL,
+    answer varchar(200) NOT NULL,
     eventID integer NOT NULL,
     FOREIGN KEY (eventID) REFERENCES EVENT
 );

@@ -62,24 +62,13 @@ INSERT INTO EVENT (eventID, eventName, eventStart,eventEnd,website,description,g
     SELECT * FROM names;
 
 
-INSERT INTO EVENTQA (QUESTION, ANSWER, EVENTID)
-    WITH names (QUESTION, ANSWER, EVENTID) AS (
-        SELECT 'How do I contact organzier', 'Email us at OrganizationA@gmail.com', 1 FROM dual UNION ALL
-        SELECT 'How do I contact organzier', 'Email us at OrganizationB@gmail.com', 2 FROM dual UNION ALL
-        SELECT 'How do I contact organzier', 'Email us at OrganizationC@gmail.com', 3 FROM dual UNION ALL
-        SELECT 'How do I contact organzier', 'Email us at OrganizationD@gmail.com', 4 FROM dual UNION ALL
-        SELECT 'How do I contact organzier', 'Email us at OrganizationE@gmail.com', 5 FROM dual
-    )
-    SELECT * FROM names;
-
-
-INSERT INTO FAQ (FAQID, QUESTION,EVENTID)
-    WITH names (FAQID, QUESTION,EVENTID) AS (
-        SELECT 1, 'How do I contact organzier',  1 FROM dual UNION ALL
-        SELECT 2, 'How do I contact organzier', 2 FROM dual UNION ALL
-        SELECT 3, 'How do I contact organzier', 3 FROM dual UNION ALL
-        SELECT 4, 'How do I contact organzier',  4 FROM dual UNION ALL
-        SELECT 5, 'How do I contact organzier',  5 FROM dual
+INSERT INTO EVENTFAQ (FAQID, QUESTION, ANSWER, EVENTID)
+    WITH names (FAQID, QUESTION, ANSWER, EVENTID) AS (
+        SELECT 1, 'How do I contact organzier', 'Email us at OrganizationA@gmail.com', 1 FROM dual UNION ALL
+        SELECT 2, 'How do I contact organzier', 'Email us at OrganizationB@gmail.com', 2 FROM dual UNION ALL
+        SELECT 3, 'How do I contact organzier', 'Email us at OrganizationC@gmail.com', 3 FROM dual UNION ALL
+        SELECT 4, 'How do I contact organzier', 'Email us at OrganizationD@gmail.com', 4 FROM dual UNION ALL
+        SELECT 5, 'How do I contact organzier', 'Email us at OrganizationE@gmail.com', 5 FROM dual
     )
     SELECT * FROM names;
 
