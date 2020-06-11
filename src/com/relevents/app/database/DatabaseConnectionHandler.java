@@ -28,6 +28,14 @@ public class DatabaseConnectionHandler {
         }
     }
 
+    private void rollbackConnection() {
+        try  {
+            connection.rollback();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+    }
+
     public void close() {
         try {
             if (connection != null) {
@@ -38,28 +46,10 @@ public class DatabaseConnectionHandler {
         }
     }
 
-    public void deleteBranch(int branchId) {
-        try {
-            PreparedStatement ps = connection.prepareStatement("DELETE FROM branch WHERE branch_id = ?");
-            ps.setInt(1, branchId);
-
-            int rowCount = ps.executeUpdate();
-            if (rowCount == 0) {
-                System.out.println(WARNING_TAG + " Branch " + branchId + " does not exist!");
-            }
-
-            connection.commit();
-
-            ps.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-            rollbackConnection();
-        }
-    }
-
+    // ---------------------------------------------EVENT FUNCTIONS---------------------------------------------------
     public void insertEvent(Event model) {
         try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO branch VALUES (?,?,?,?,?,?,?)");
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO Event VALUES (?,?,?,?,?,?,?)");
             ps.setInt(1, model.getEventID());
             ps.setString(2, model.getEventName());
             ps.setDate(3, model.getEventDate());
@@ -83,18 +73,18 @@ public class DatabaseConnectionHandler {
 
         try {
             Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM branch");
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Event");
 
-//    		// get info on ResultSet
-//    		ResultSetMetaData rsmd = rs.getMetaData();
-//
-//    		System.out.println(" ");
-//
-//    		// display column names;
-//    		for (int i = 0; i < rsmd.getColumnCount(); i++) {
-//    			// get column name and print it
-//    			System.out.printf("%-15s", rsmd.getColumnName(i + 1));
-//    		}
+    		// get info on ResultSet
+    		ResultSetMetaData rsmd = rs.getMetaData();
+
+    		System.out.println(" ");
+
+    		// display column names;
+    		for (int i = 0; i < rsmd.getColumnCount(); i++) {
+    			// get column name and print it
+    			System.out.printf("%-15s", rsmd.getColumnName(i + 1));
+    		}
 
             while(rs.next()) {
                 Event model = new Event(rs.getInt("eventID"),
@@ -116,15 +106,15 @@ public class DatabaseConnectionHandler {
         return result.toArray(new Event[result.size()]);
     }
 
-    public void updateBranch(int id, String name) {
+    public void updateEvent(int id, String name) {
         try {
-            PreparedStatement ps = connection.prepareStatement("UPDATE branch SET branch_name = ? WHERE branch_id = ?");
+            PreparedStatement ps = connection.prepareStatement("UPDATE Event SET eventName = ? WHERE eventID = ?");
             ps.setString(1, name);
             ps.setInt(2, id);
 
             int rowCount = ps.executeUpdate();
             if (rowCount == 0) {
-                System.out.println(WARNING_TAG + " Branch " + id + " does not exist!");
+                System.out.println(WARNING_TAG + " Event " + id + " does not exist!");
             }
 
             connection.commit();
@@ -136,6 +126,36 @@ public class DatabaseConnectionHandler {
         }
     }
 
+    public void deleteEvent(int eventID) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("DELETE FROM Event WHERE eventID = ?");
+            ps.setInt(1, eventID);
+
+            int rowCount = ps.executeUpdate();
+            if (rowCount == 0) {
+                System.out.println(WARNING_TAG + " Event " + eventID + " does not exist!");
+            }
+
+            connection.commit();
+
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            rollbackConnection();
+        }
+    }
+
+    // ---------------------------------------------LOCATION FUNCTIONS--------------------------------------------------
+    // TODO
+
+    // ---------------------------------------------ORGANIZATION FUNCTIONS----------------------------------------------
+    // TODO
+
+    // ---------------------------------------------USER FUNCTIONS------------------------------------------------------
+    // TODO
+    
+
+    // TODO: not sure if functions below are necessary for our app
     public boolean login(String username, String password) {
         try {
             if (connection != null) {
@@ -153,20 +173,12 @@ public class DatabaseConnectionHandler {
         }
     }
 
-    private void rollbackConnection() {
-        try  {
-            connection.rollback();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-    }
-
     public void databaseSetup() {
-        dropBranchTableIfExists();
+        dropEventTableIfExists();
 
         try {
             Statement stmt = connection.createStatement();
-            stmt.executeUpdate("CREATE TABLE branch (branch_id integer PRIMARY KEY, branch_name varchar2(20) not null, branch_addr varchar2(50), branch_city varchar2(20) not null, branch_phone integer)");
+            stmt.executeUpdate("CREATE TABLE Event (eventID integer PRIMARY KEY, eventName varchar(50), eventStart timestamp, eventEnd timestamp, website varchar(50), description varchar(4000), governingID integer, FOREIGN KEY (governingID) REFERENCES GOVERNINGBODY)");
             stmt.close();
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
@@ -179,14 +191,14 @@ public class DatabaseConnectionHandler {
 //        insertEvent(branch2);
     }
 
-    private void dropBranchTableIfExists() {
+    private void dropEventTableIfExists() {
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("select table_name from user_tables");
 
             while(rs.next()) {
-                if(rs.getString(1).toLowerCase().equals("branch")) {
-                    stmt.execute("DROP TABLE branch");
+                if(rs.getString(1).toLowerCase().equals("event")) {
+                    stmt.execute("DROP TABLE event");
                     break;
                 }
             }
