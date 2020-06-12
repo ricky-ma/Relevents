@@ -10,7 +10,7 @@ import java.util.ArrayList;
  */
 public class DatabaseConnectionHandler {
     // Use this version of the ORACLE_URL if you are running the code off of the server
-    //	private static final String ORACLE_URL = "jdbc:oracle:thin:@dbhost.students.cs.ubc.ca:1522:stu";
+//    private static final String ORACLE_URL = "jdbc:oracle:thin:@dbhost.students.cs.ubc.ca:1522:stu";
     // Use this version of the ORACLE_URL if you are tunneling into the undergrad servers
     private static final String ORACLE_URL = "jdbc:oracle:thin:@localhost:1522:stu";
     private static final String EXCEPTION_TAG = "[EXCEPTION]";
@@ -52,14 +52,15 @@ public class DatabaseConnectionHandler {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO Event VALUES (?,?,?,?,?,?,?)");
             ps.setInt(1, model.getEventID());
             ps.setString(2, model.getEventName());
-            ps.setDate(3, model.getEventDate());
-            ps.setTimestamp(4, model.getEventTime());
+            ps.setTimestamp(3, model.getEventStart());
+            ps.setTimestamp(4, model.getEventEnd());
             ps.setString(5, model.getWebsite());
             ps.setString(6, model.getDescription());
             ps.setInt(7, model.getGoverningID());
 
             ps.executeUpdate();
             connection.commit();
+            System.out.println("inserted");
 
             ps.close();
         } catch (SQLException e) {
@@ -89,8 +90,8 @@ public class DatabaseConnectionHandler {
             while(rs.next()) {
                 Event model = new Event(rs.getInt("eventID"),
                         rs.getString("eventName"),
-                        rs.getDate("eventDate"),
-                        rs.getTimestamp("eventTime"),
+                        rs.getTimestamp("eventStart"),
+                        rs.getTimestamp("eventEnd"),
                         rs.getString("website"),
                         rs.getString("description"),
                         rs.getInt("governingID"));
@@ -162,6 +163,7 @@ public class DatabaseConnectionHandler {
             }
 
             connection = DriverManager.getConnection(ORACLE_URL, username, password);
+            System.out.println("here");
             connection.setAutoCommit(false);
 
             System.out.println("\nConnected to Oracle!");

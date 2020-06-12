@@ -1,6 +1,7 @@
 package com.relevents.app.ui;
 
 import com.relevents.app.database.DatabaseConnectionHandler;
+import com.relevents.app.model.Event;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -11,6 +12,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
+
+import java.sql.Timestamp;
+import java.util.Arrays;
 
 public class ReleventsApp extends Application{
 
@@ -39,6 +43,26 @@ public class ReleventsApp extends Application{
         primaryStage.setResizable(false);
         primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.show();
+
+
+        // testing database connection
+        boolean didConnect = dbHandler.login("ora_rickyma", "a82943424");
+        if (didConnect) {
+
+
+            Timestamp t1 = new Timestamp(2020,6,20,14,0,0,0);
+            Timestamp t2 = new Timestamp(2020,6,21,14,0,0,0);
+            Event e1 = new Event(13, "party", t1, t2, "www.events.com", "description", 1);
+            dbHandler.insertEvent(e1);
+
+            Event[] eventInfoTable = dbHandler.getEventInfo();
+            System.out.println(Arrays.toString(eventInfoTable));
+
+            dbHandler.deleteEvent(13);
+            Event[] eventInfoTable2 = dbHandler.getEventInfo();
+            System.out.println(Arrays.toString(eventInfoTable2));
+        }
+        dbHandler.close();
     }
 
     public static HBox navButtons(Stage primaryStage) {
@@ -82,6 +106,7 @@ public class ReleventsApp extends Application{
         System.out.println("Hello World, Java app");
 //        ReleventsApp app = new ReleventsApp();
         launch(args);
+
     }
 
 }

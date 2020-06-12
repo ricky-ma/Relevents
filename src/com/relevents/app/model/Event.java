@@ -3,7 +3,6 @@ package com.relevents.app.model;
 import org.javatuples.Quartet;
 import org.javatuples.Triplet;
 
-import java.sql.Date;
 import java.sql.Timestamp;
 import java.util.ArrayList;
 
@@ -14,8 +13,8 @@ public class Event {
 
     private final Integer eventID;
     private final String eventName;
-    private final Date eventDate;
-    private final Timestamp eventTime;
+    private final Timestamp eventStart;
+    private final Timestamp eventEnd;
     private final String website;
     private final String description;
     private final Integer governingID;
@@ -27,11 +26,11 @@ public class Event {
     public ArrayList<String> topics;
     public Location location;
 
-    public Event(Integer eventID, String eventName, Date eventDate, Timestamp eventTime, String website, String description, Integer governingID) {
+    public Event(Integer eventID, String eventName, Timestamp eventStart, Timestamp eventEnd, String website, String description, Integer governingID) {
         this.eventID = eventID;
         this.eventName = eventName;
-        this.eventDate = eventDate;
-        this.eventTime = eventTime;
+        this.eventStart = eventStart;
+        this.eventEnd = eventEnd;
         this.website = website;
         this.description = description;
         this.governingID = governingID;
@@ -45,12 +44,12 @@ public class Event {
         return eventName;
     }
 
-    public Date getEventDate() {
-        return eventDate;
+    public Timestamp getEventStart() {
+        return eventStart;
     }
 
-    public Timestamp getEventTime() {
-        return eventTime;
+    public Timestamp getEventEnd() {
+        return eventEnd;
     }
 
     public String getWebsite() {
