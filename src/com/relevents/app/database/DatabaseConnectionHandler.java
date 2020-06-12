@@ -1,6 +1,7 @@
 package com.relevents.app.database;
 
 import com.relevents.app.model.Event;
+import com.relevents.app.model.User;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -146,6 +147,33 @@ public class DatabaseConnectionHandler {
         }
     }
 
+    public Event[] sortEventsByDate() {
+        ArrayList<Event> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Event ORDER BY Eventstart DESC");
+
+            while(rs.next()) {
+                Event model = new Event(rs.getInt("eventID"),
+                        rs.getString("eventName"),
+                        rs.getTimestamp("eventStart"),
+                        rs.getTimestamp("eventEnd"),
+                        rs.getString("website"),
+                        rs.getString("description"),
+                        rs.getInt("governingID"));
+                result.add(model);
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new Event[result.size()]);
+    }
+
     // ---------------------------------------------LOCATION FUNCTIONS--------------------------------------------------
     // TODO
 
@@ -154,6 +182,70 @@ public class DatabaseConnectionHandler {
 
     // ---------------------------------------------USER FUNCTIONS------------------------------------------------------
     // TODO
+    public User[] usersAttendedAllEvents() {
+        ArrayList<User> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM APPUSER app WHERE NOT EXISTS ((SELECT E.EVENTID FROM " +
+                    "EVENT E) MINUS (SELECT A.EVENTID FROM ATTENDS A WHERE A.USERID = APP.USERID))");
+            // get info on ResultSet
+            ResultSetMetaData rsmd = rs.getMetaData();
+
+            System.out.println(" ");
+
+            // display column names;
+            for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                // get column name and print it
+                System.out.printf("%-15s", rsmd.getColumnName(i + 1));
+            }
+
+            while(rs.next()) {
+                User model = new User(rs.getInt("USERID"),
+                        rs.getString("FNAME"),
+                        rs.getString("LNAME"),
+                        rs.getDate("BIRTHDATE"),
+                        rs.getString("PHONE"),
+                        rs.getString("EMAIL"),
+                        rs.getInt("CITYID"));
+                result.add(model);
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new User[result.size()]);
+    }
+
+    public User[] getUserInfo() {
+        ArrayList<User> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM APPUSER");
+
+            while(rs.next()) {
+                User model = new User(rs.getInt("USERID"),
+                        rs.getString("FNAME"),
+                        rs.getString("LNAME"),
+                        rs.getDate("BIRTHDATE"),
+                        rs.getString("PHONE"),
+                        rs.getString("EMAIL"),
+                        rs.getInt("CITYID"));
+                result.add(model);
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new User[result.size()]);
+    }
 
     // TODO: not sure if functions below are necessary for our app
     public boolean login(String username, String password) {
