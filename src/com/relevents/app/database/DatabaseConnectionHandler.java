@@ -153,7 +153,6 @@ public class DatabaseConnectionHandler {
 
     // ---------------------------------------------USER FUNCTIONS------------------------------------------------------
     // TODO
-    
 
     // TODO: not sure if functions below are necessary for our app
     public boolean login(String username, String password) {
