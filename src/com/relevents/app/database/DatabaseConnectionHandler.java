@@ -247,6 +247,69 @@ public class DatabaseConnectionHandler {
         return result.toArray(new User[result.size()]);
     }
 
+    // retrieve all the events a user is attending
+    public Event[] eventsUserIsAttending(int userID) {
+        ArrayList<Event> result = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT E.EVENTID, E.EVENTNAME, E.EVENTSTART, E.EVENTEND, E.WEBSITE," +
+                    " E.DESCRIPTION, E.GOVERNINGID FROM EVENT E, APPUSER APP, ATTENDS A WHERE APP.USERID = ? " +
+                    "AND APP.USERID = A.USERID AND A.EVENTID = E.EVENTID");
+            ps.setInt(1, userID);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Event model = new Event(rs.getInt("eventID"),
+                        rs.getString("eventName"),
+                        rs.getTimestamp("eventStart"),
+                        rs.getTimestamp("eventEnd"),
+                        rs.getString("website"),
+                        rs.getString("description"),
+                        rs.getInt("governingID"));
+                result.add(model);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new Event[result.size()]);
+    }
+
+    // retrieve all the users attending an event
+    public User[] usersOfAnEvent(int eventID) {
+        ArrayList<User> result = new ArrayList<>();
+
+        try {
+
+            PreparedStatement ps = connection.prepareStatement("SELECT APP.USERID, APP.FNAME, APP.LNAME, APP.BIRTHDATE, APP.PHONE, " +
+                    "APP.EMAIL, APP.CITYID FROM EVENT E, APPUSER APP, ATTENDS A WHERE E.EVENTID = A.EVENTID AND " +
+                    "A.USERID = APP.USERID AND E.EVENTID = ?");
+            ps.setInt(1, eventID);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                User model = new User(rs.getInt("USERID"),
+                        rs.getString("FNAME"),
+                        rs.getString("LNAME"),
+                        rs.getDate("BIRTHDATE"),
+                        rs.getString("PHONE"),
+                        rs.getString("EMAIL"),
+                        rs.getInt("CITYID"));
+                result.add(model);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new User[result.size()]);
+    }
+
     // TODO: not sure if functions below are necessary for our app
     public boolean login(String username, String password) {
         try {
