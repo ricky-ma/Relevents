@@ -1,6 +1,7 @@
 package com.relevents.app.database;
 
 import com.relevents.app.model.Event;
+import com.relevents.app.model.Organization;
 import com.relevents.app.model.User;
 
 import java.sql.*;
@@ -322,15 +323,45 @@ public class DatabaseConnectionHandler {
         return result.toArray(new User[result.size()]);
     }
 
+    // retrieve all organizations a user manages
+    public Organization[] userOrganizations(String email) {
+        ArrayList<Organization> result = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT O.ORGANIZATIONID, O.ORGNAME, O.DESCRIPTION, " +
+                    "O.EMAIL, O.WEBSITE FROM ORGANIZATION O, APPUSER USER, MANAGES M WHERE USER.EMAIL = ? " +
+                    "AND USER.EMAIL = M.EMAIL AND O.ORGANIZATIONID = M.ORGANIZATIONID");
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Organization model = new Organization(rs.getInt("organizationID"),
+                        rs.getString("orgName"),
+                        rs.getString("description"),
+                        rs.getString("email"),
+                        rs.getString("website")
+                );
+                result.add(model);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new Organization[result.size()]);
+    }
+
     // retrieve all the events a user is attending
-    public Event[] eventsUserIsAttending(int userID) {
+    public Event[] userEvents(String email) {
         ArrayList<Event> result = new ArrayList<>();
 
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT E.EVENTID, E.EVENTNAME, E.EVENTSTART, E.EVENTEND, E.WEBSITE," +
                     " E.DESCRIPTION, E.GOVERNINGID FROM EVENT E, APPUSER APP, ATTENDS A WHERE APP.EMAIL = ? " +
                     "AND APP.EMAIL = A.EMAIL AND A.EVENTID = E.EVENTID");
-            ps.setInt(1, userID);
+            ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
@@ -354,7 +385,7 @@ public class DatabaseConnectionHandler {
     }
 
     // retrieve all the users attending an event
-    public User[] usersOfAnEvent(int eventID) {
+    public User[] eventUsers(int eventID) {
         ArrayList<User> result = new ArrayList<>();
 
         try {
