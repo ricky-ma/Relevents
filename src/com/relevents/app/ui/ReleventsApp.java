@@ -1,7 +1,10 @@
 package com.relevents.app.ui;
 
 import com.relevents.app.database.DatabaseConnectionHandler;
+import com.relevents.app.model.CityUser;
 import com.relevents.app.model.Event;
+import com.relevents.app.model.Location;
+import com.relevents.app.model.Organization;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -45,7 +48,7 @@ public class ReleventsApp extends Application {
 
 
         // testing database connection
-        boolean didConnect = dbHandler.login("ora_rickyma", "a82943424");
+        boolean didConnect = dbHandler.login("ora_brucecui", "a13412151");
         if (didConnect) {
 
 
@@ -60,6 +63,19 @@ public class ReleventsApp extends Application {
             dbHandler.deleteEvent(13);
             Event[] eventInfoTable2 = dbHandler.getEventInfo();
             System.out.println(Arrays.toString(eventInfoTable2));
+
+            Event[] eventInfoTable3 = dbHandler.earliestEvent();
+            System.out.println(Arrays.toString(eventInfoTable3));
+
+            Location[] locationInfoTable = dbHandler.getLocationInfo();
+            System.out.println(Arrays.toString(locationInfoTable));
+
+            Organization[] organizationInfoTable = dbHandler.getOrganizationInfo();
+            System.out.println(Arrays.toString(organizationInfoTable));
+
+            CityUser[] cityUserInfoTable = dbHandler.cityUsers();
+            System.out.println(Arrays.toString(cityUserInfoTable));
+
         }
         ReleventsApp app = new ReleventsApp();
         app.dbHandler = dbHandler;
@@ -120,6 +136,7 @@ public class ReleventsApp extends Application {
         System.out.println("Hello World, Java app");
 //        ReleventsApp app = new ReleventsApp();
         launch(LoginWindow.class, args);
+
     }
 
 }
