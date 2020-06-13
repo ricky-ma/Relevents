@@ -11,10 +11,12 @@ import javafx.stage.Stage;
 
 public class MeController extends Application {
 
-    ReleventsApp app = new ReleventsApp();
-    LoginWindow loginInfo = new LoginWindow();
+    LoginWindow loginInst = LoginWindow.getInstance();
+    ReleventsApp appInst = ReleventsApp.getInstance();
 
-    User userInfo = app.getDbHandler().getOneUserInfo(loginInfo.getUserEmail());
+    String email = LoginWindow.getInstance().userEmail;
+
+    User userInfo = ReleventsApp.getInstance().getDbHandler().getOneUserInfo(email);
 
 
     public void start(Stage primaryStage) {

@@ -17,7 +17,8 @@ import javafx.stage.Stage;
 
 public class LoginWindow extends Application {
 
-    private String userEmail;
+    public String userEmail;
+    private static volatile LoginWindow instance;
 
     public void start(Stage primaryStage) throws Exception {
         GridPane grid = new GridPane();
@@ -51,8 +52,11 @@ public class LoginWindow extends Application {
         grid.add(hbBtn, 1, 4);
 
         btn.setOnAction(e -> {
-            ReleventsApp homeWindow = new ReleventsApp();
             userEmail = userTextField.getText();
+            LoginWindow loginWindow = new LoginWindow();
+            instance = loginWindow;
+            loginWindow.userEmail = userTextField.getText();
+            ReleventsApp homeWindow = new ReleventsApp();
             try {
                 homeWindow.start(primaryStage);
             } catch (Exception ex) {
@@ -67,5 +71,12 @@ public class LoginWindow extends Application {
 
     public String getUserEmail() {
         return userEmail;
+    }
+
+    public static LoginWindow getInstance() {
+        if (instance == null ) {
+            instance = new LoginWindow();
+        }
+        return instance;
     }
 }

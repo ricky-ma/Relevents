@@ -271,24 +271,29 @@ public class DatabaseConnectionHandler {
     }
 
     public User getOneUserInfo(String email) {
-        User model = null;
+        ArrayList<User> result = new ArrayList<>();
         try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM APPUSER WHERE EMAIL = " + email);
-            model = new User(rs.getString("EMAIL"),
-                    rs.getString("FNAME"),
-                    rs.getString("LNAME"),
-                    rs.getDate("BIRTHDATE"),
-                    rs.getString("PHONE"),
-                    rs.getInt("CITYID"));
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM APPUSER WHERE EMAIL = ?");
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                User model = new User(rs.getString("EMAIL"),
+                        rs.getString("FNAME"),
+                        rs.getString("LNAME"),
+                        rs.getDate("BIRTHDATE"),
+                        rs.getString("PHONE"),
+                        rs.getInt("CITYID"));
+                result.add(model);
+            }
 
             rs.close();
-            stmt.close();
+            ps.close();
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
 
-        return model;
+        return result.get(0);
     }
 
     public User[] getUserInfo() {

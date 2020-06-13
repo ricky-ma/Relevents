@@ -15,9 +15,10 @@ import javafx.stage.Stage;
 import java.sql.Timestamp;
 import java.util.Arrays;
 
-public class ReleventsApp extends Application{
+public class ReleventsApp extends Application {
 
-    private static DatabaseConnectionHandler dbHandler = null;
+    private static volatile ReleventsApp instance;
+    private DatabaseConnectionHandler dbHandler = null;
 
     public ReleventsApp() {
         dbHandler = new DatabaseConnectionHandler();
@@ -60,7 +61,11 @@ public class ReleventsApp extends Application{
             Event[] eventInfoTable2 = dbHandler.getEventInfo();
             System.out.println(Arrays.toString(eventInfoTable2));
         }
-        dbHandler.close();
+        ReleventsApp app = new ReleventsApp();
+        app.dbHandler = dbHandler;
+        instance = app;
+
+//        dbHandler.close();
     }
 
     public static HBox navButtons(Stage primaryStage) {
@@ -102,13 +107,19 @@ public class ReleventsApp extends Application{
         return dbHandler;
     }
 
+    public static ReleventsApp getInstance() {
+        if (instance == null ) {
+            instance = new ReleventsApp();
+        }
+        return instance;
+    }
 
 
-    public static void main(String[] args) {
+
+    public static void main(String[] args) throws Exception{
         System.out.println("Hello World, Java app");
 //        ReleventsApp app = new ReleventsApp();
-        launch(args);
-
+        launch(LoginWindow.class, args);
     }
 
 }
