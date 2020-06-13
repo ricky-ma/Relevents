@@ -1,8 +1,6 @@
 package com.relevents.app.database;
 
-import com.relevents.app.model.Event;
-import com.relevents.app.model.Organization;
-import com.relevents.app.model.User;
+import com.relevents.app.model.*;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -225,12 +223,161 @@ public class DatabaseConnectionHandler {
 
         return result.toArray(new Event[result.size()]);
     }
+
+    public Event[] earliestEvent(){
+        ArrayList<Event> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("select *\n" +
+                    "from Event\n" +
+                    "where EVENTSTART=(select min(EventStart) from Event)\n");
+
+            // get info on ResultSet
+            ResultSetMetaData rsmd = rs.getMetaData();
+
+            System.out.println(" ");
+
+            // display column names;
+            for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                // get column name and print it
+                System.out.printf("%-15s", rsmd.getColumnName(i + 1));
+            }
+
+            while(rs.next()) {
+                Event model = new Event(rs.getInt("eventID"),
+                        rs.getString("eventName"),
+                        rs.getTimestamp("eventStart"),
+                        rs.getTimestamp("eventEnd"),
+                        rs.getString("website"),
+                        rs.getString("description"),
+                        rs.getInt("governingID"));
+                result.add(model);
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new Event[result.size()]);
+    }
+
     // ---------------------------------------------LOCATION FUNCTIONS--------------------------------------------------
     // TODO
+    public Location[] getLocationInfo(){
+        ArrayList<Location> result = new ArrayList<>();
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Location");
 
+            // get info on ResultSet
+            ResultSetMetaData rsmd = rs.getMetaData();
+
+            System.out.println(" ");
+
+            // display column names;
+            for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                // get column name and print it
+                System.out.printf("%-15s", rsmd.getColumnName(i + 1));
+
+            }
+
+            //Integer locationID, String locationName, String unit, Integer houseNum, String street, Integer cityID
+            while(rs.next()) {
+                Location model = new Location(rs.getInt("locationID"),
+                        rs.getString("locationName"),
+                        rs.getString("unit"),
+                        rs.getInt("houseNum"),
+                        rs.getString("street"),
+                        rs.getInt("cityID"));
+                result.add(model);
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new Location[result.size()]);
+    }
+
+    public CityUser[] cityUsers(){
+        ArrayList<CityUser> result = new ArrayList<>();
+
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("select c.CITYNAME, count(*) as numUsers\n" +
+                    "from City c, APPUSER u\n" +
+                    "where c.CITYID = u.CITYID\n" +
+                    "group by c.cityName");
+
+            // get info on ResultSet
+            ResultSetMetaData rsmd = rs.getMetaData();
+
+            System.out.println(" ");
+
+            // display column names;
+            for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                // get column name and print it
+                System.out.printf("%-15s", rsmd.getColumnName(i + 1));
+            }
+
+            while(rs.next()) {
+                CityUser model = new CityUser(rs.getString("cityName"),
+                        rs.getInt("numUsers"));
+                result.add(model);
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new CityUser[result.size()]);
+
+    }
     // ---------------------------------------------ORGANIZATION FUNCTIONS----------------------------------------------
     // TODO
+    public Organization[] getOrganizationInfo(){
+        ArrayList<Organization> result = new ArrayList<>();
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM ORGANIZATION");
 
+            // get info on ResultSet
+            ResultSetMetaData rsmd = rs.getMetaData();
+
+            System.out.println(" ");
+
+            // display column names;
+            for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                // get column name and print it
+                System.out.printf("%-15s", rsmd.getColumnName(i + 1));
+
+            }
+
+            //Integer locationID, String locationName, String unit, Integer houseNum, String street, Integer cityID
+            while(rs.next()) {
+                Organization model = new Organization(rs.getInt("organizationID"),
+                        rs.getString("orgName"),
+                        rs.getString("description"),
+                        rs.getString("email"),
+                        rs.getString("website"));
+                result.add(model);
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new Organization[result.size()]);
+    }
     // ---------------------------------------------USER FUNCTIONS------------------------------------------------------
     // TODO
     // retrieve users who attended all events
