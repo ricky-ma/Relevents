@@ -37,6 +37,24 @@ public class DatabaseConnectionHandler {
         }
     }
 
+    public boolean login(String username, String password) {
+        try {
+            if (connection != null) {
+                connection.close();
+            }
+
+            connection = DriverManager.getConnection(ORACLE_URL, username, password);
+            System.out.println("here");
+            connection.setAutoCommit(false);
+
+            System.out.println("\nConnected to Oracle!");
+            return true;
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+            return false;
+        }
+    }
+
     public void close() {
         try {
             if (connection != null) {
@@ -221,7 +239,7 @@ public class DatabaseConnectionHandler {
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM APPUSER app WHERE NOT EXISTS ((SELECT E.EVENTID FROM " +
-                    "EVENT E) MINUS (SELECT A.EVENTID FROM ATTENDS A WHERE A.USERID = APP.USERID))");
+                    "EVENT E) MINUS (SELECT A.EVENTID FROM ATTENDS A WHERE A.EMAIL = APP.EMAIL))");
             // get info on ResultSet
             ResultSetMetaData rsmd = rs.getMetaData();
 
@@ -234,12 +252,11 @@ public class DatabaseConnectionHandler {
             }
 
             while(rs.next()) {
-                User model = new User(rs.getInt("USERID"),
+                User model = new User(rs.getString("EMAIL"),
                         rs.getString("FNAME"),
                         rs.getString("LNAME"),
                         rs.getDate("BIRTHDATE"),
                         rs.getString("PHONE"),
-                        rs.getString("EMAIL"),
                         rs.getInt("CITYID"));
                 result.add(model);
             }
@@ -253,6 +270,27 @@ public class DatabaseConnectionHandler {
         return result.toArray(new User[result.size()]);
     }
 
+    public User getOneUserInfo(String email) {
+        User model = null;
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM APPUSER WHERE EMAIL = " + email);
+            model = new User(rs.getString("EMAIL"),
+                    rs.getString("FNAME"),
+                    rs.getString("LNAME"),
+                    rs.getDate("BIRTHDATE"),
+                    rs.getString("PHONE"),
+                    rs.getInt("CITYID"));
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return model;
+    }
+
     public User[] getUserInfo() {
         ArrayList<User> result = new ArrayList<>();
 
@@ -261,12 +299,11 @@ public class DatabaseConnectionHandler {
             ResultSet rs = stmt.executeQuery("SELECT * FROM APPUSER");
 
             while(rs.next()) {
-                User model = new User(rs.getInt("USERID"),
+                User model = new User(rs.getString("EMAIL"),
                         rs.getString("FNAME"),
                         rs.getString("LNAME"),
                         rs.getDate("BIRTHDATE"),
                         rs.getString("PHONE"),
-                        rs.getString("EMAIL"),
                         rs.getInt("CITYID"));
                 result.add(model);
             }
@@ -286,8 +323,8 @@ public class DatabaseConnectionHandler {
 
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT E.EVENTID, E.EVENTNAME, E.EVENTSTART, E.EVENTEND, E.WEBSITE," +
-                    " E.DESCRIPTION, E.GOVERNINGID FROM EVENT E, APPUSER APP, ATTENDS A WHERE APP.USERID = ? " +
-                    "AND APP.USERID = A.USERID AND A.EVENTID = E.EVENTID");
+                    " E.DESCRIPTION, E.GOVERNINGID FROM EVENT E, APPUSER APP, ATTENDS A WHERE APP.EMAIL = ? " +
+                    "AND APP.EMAIL = A.EMAIL AND A.EVENTID = E.EVENTID");
             ps.setInt(1, userID);
             ResultSet rs = ps.executeQuery();
 
@@ -317,19 +354,18 @@ public class DatabaseConnectionHandler {
 
         try {
 
-            PreparedStatement ps = connection.prepareStatement("SELECT APP.USERID, APP.FNAME, APP.LNAME, APP.BIRTHDATE, APP.PHONE, " +
+            PreparedStatement ps = connection.prepareStatement("SELECT APP.EMAIL, APP.FNAME, APP.LNAME, APP.BIRTHDATE, APP.PHONE, " +
                     "APP.EMAIL, APP.CITYID FROM EVENT E, APPUSER APP, ATTENDS A WHERE E.EVENTID = A.EVENTID AND " +
-                    "A.USERID = APP.USERID AND E.EVENTID = ?");
+                    "A.EMAIL = APP.EMAIL AND E.EVENTID = ?");
             ps.setInt(1, eventID);
             ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
-                User model = new User(rs.getInt("USERID"),
+                User model = new User(rs.getString("EMAIL"),
                         rs.getString("FNAME"),
                         rs.getString("LNAME"),
                         rs.getDate("BIRTHDATE"),
                         rs.getString("PHONE"),
-                        rs.getString("EMAIL"),
                         rs.getInt("CITYID"));
                 result.add(model);
             }
@@ -343,24 +379,6 @@ public class DatabaseConnectionHandler {
         return result.toArray(new User[result.size()]);
     }
 
-    // TODO: not sure if functions below are necessary for our app
-    public boolean login(String username, String password) {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
-
-            connection = DriverManager.getConnection(ORACLE_URL, username, password);
-            System.out.println("here");
-            connection.setAutoCommit(false);
-
-            System.out.println("\nConnected to Oracle!");
-            return true;
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-            return false;
-        }
-    }
 
     public void databaseSetup() {
         dropEventTableIfExists();

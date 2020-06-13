@@ -5,12 +5,11 @@ import java.util.ArrayList;
 
 public class User {
 
-    private final Integer userID;
+    private final String email;
     private final String fname;
     private final String lname;
     private final Date birthdate;
     private final String phone;
-    private final String email;
     private final Integer cityID;
 
     public ArrayList<Organization> following;
@@ -18,19 +17,15 @@ public class User {
     public ArrayList<String> topicPreferences;
     public ArrayList<Event> attending;
 
-    public User(Integer userID, String fname, String lname, Date birthdate, String phone, String email, Integer cityID) {
-        this.userID = userID;
+    public User(String email, String fname, String lname, Date birthdate, String phone, Integer cityID) {
+        this.email = email;
         this.fname = fname;
         this.lname = lname;
         this.birthdate = birthdate;
         this.phone = phone;
-        this.email = email;
         this.cityID = cityID;
     }
 
-    public Integer getUserID() {
-        return userID;
-    }
 
     public String getFname() {
         return fname;

@@ -17,12 +17,11 @@ CREATE TABLE LOCATION (
 );
 
 CREATE TABLE APPUSER (
-    userID integer PRIMARY KEY,
+    email varchar(50) PRIMARY KEY,
     fname varchar(20),
     lname varchar(20),
     birthdate date,
     phone varchar(20),
-    email varchar(50),
     cityID integer,
     FOREIGN KEY (cityID) REFERENCES CITY
 );
@@ -84,36 +83,36 @@ CREATE TABLE DESCRIBES (
 );
 
 CREATE TABLE PREFERS (
-    userID integer,
+    email varchar2(50),
     topicName varchar(20),
-    FOREIGN KEY (userID) REFERENCES APPUSER (userID),
+    FOREIGN KEY (email) REFERENCES APPUSER (email),
     FOREIGN KEY (topicName) REFERENCES TOPIC (topicName),
-    PRIMARY KEY (userID, topicName)
+    PRIMARY KEY (email, topicName)
 );
 
 CREATE TABLE FOLLOWS (
-    userID integer,
+    email varchar2(50),
     organizationID integer,
-    FOREIGN KEY (userID) REFERENCES APPUSER (userID),
+    FOREIGN KEY (email) REFERENCES APPUSER (email),
     FOREIGN KEY (organizationID) REFERENCES ORGANIZATION (organizationID),
-    PRIMARY KEY (userID, organizationID)
+    PRIMARY KEY (email, organizationID)
 );
 
 CREATE TABLE MANAGES (
-    userID integer,
+    email varchar2(50),
     organizationID integer,
     eventID integer,
-    FOREIGN KEY (userID) REFERENCES APPUSER (userID),
+    FOREIGN KEY (email) REFERENCES APPUSER (email),
     FOREIGN KEY (organizationID) REFERENCES ORGANIZATION (organizationID),
     PRIMARY KEY (organizationID)
 );
 
 CREATE TABLE ATTENDS (
-    userID integer,
+    email varchar2(50),
     eventID integer,
-    FOREIGN KEY (userID) REFERENCES APPUSER (userID),
+    FOREIGN KEY (email) REFERENCES APPUSER (email),
     FOREIGN KEY (eventID) REFERENCES EVENT (eventID),
-    PRIMARY KEY (userID, eventID)
+    PRIMARY KEY (email, eventID)
 );
 
 CREATE TABLE HOSTS (

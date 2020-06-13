@@ -2,7 +2,6 @@ package com.relevents.app.ui;
 
 import com.relevents.app.database.DatabaseConnectionHandler;
 import com.relevents.app.model.Event;
-import com.relevents.app.model.User;
 import javafx.application.Application;
 import javafx.geometry.Pos;
 import javafx.scene.Scene;
@@ -12,14 +11,13 @@ import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
-import javafx.stage.StageStyle;
 
 import java.sql.Timestamp;
 import java.util.Arrays;
 
 public class ReleventsApp extends Application{
 
-    private DatabaseConnectionHandler dbHandler = null;
+    private static DatabaseConnectionHandler dbHandler = null;
 
     public ReleventsApp() {
         dbHandler = new DatabaseConnectionHandler();
@@ -42,7 +40,6 @@ public class ReleventsApp extends Application{
         primaryStage.setTitle("RELEVENTS");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
-        primaryStage.initStyle(StageStyle.UNDECORATED);
         primaryStage.show();
 
 
@@ -99,6 +96,10 @@ public class ReleventsApp extends Application{
 
         hbButtons.setAlignment(Pos.CENTER);
         return hbButtons;
+    }
+
+    public DatabaseConnectionHandler getDbHandler() {
+        return dbHandler;
     }
 
 
