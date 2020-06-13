@@ -174,6 +174,38 @@ public class DatabaseConnectionHandler {
         return result.toArray(new Event[result.size()]);
     }
 
+    // select event that has "something" in its name or "something" in topicname
+    public Event[] searchEventsByKeyword(String keyword) {
+        ArrayList<Event> result = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM EVENT WHERE lower(EVENT.EVENTNAME) LIKE ? " +
+                    "UNION SELECT E.EVENTID, E.EVENTNAME, E.EVENTSTART, E.EVENTEND, E.WEBSITE, E.DESCRIPTION, " +
+                    "E.GOVERNINGID FROM EVENT E INNER JOIN DESCRIBES D on E.EVENTID = D.EVENTID WHERE lower(D.TOPICNAME) LIKE ?");
+            String str = "%" + keyword + "%";
+            ps.setString(1, str.toLowerCase());
+            ps.setString(2, str.toLowerCase());
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Event model = new Event(rs.getInt("eventID"),
+                        rs.getString("eventName"),
+                        rs.getTimestamp("eventStart"),
+                        rs.getTimestamp("eventEnd"),
+                        rs.getString("website"),
+                        rs.getString("description"),
+                        rs.getInt("governingID"));
+                result.add(model);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new Event[result.size()]);
+    }
     // ---------------------------------------------LOCATION FUNCTIONS--------------------------------------------------
     // TODO
 
@@ -182,6 +214,7 @@ public class DatabaseConnectionHandler {
 
     // ---------------------------------------------USER FUNCTIONS------------------------------------------------------
     // TODO
+    // retrieve users who attended all events
     public User[] usersAttendedAllEvents() {
         ArrayList<User> result = new ArrayList<>();
 
