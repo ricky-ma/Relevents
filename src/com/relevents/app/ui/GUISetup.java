@@ -2,7 +2,6 @@ package com.relevents.app.ui;
 
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.Scene;
 import javafx.scene.control.Button;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -17,11 +16,6 @@ public class GUISetup {
         Text sceneTitle = new Text(s);
         sceneTitle.setFont(Font.font("Helvetica", bold, 30));
         grid.add(sceneTitle, 0, 0, i, 1);
-    }
-
-    public static Scene setNewScene(GridPane grid, int width, int height) {
-        Scene scene = new Scene(grid, width, height);
-        return scene;
     }
 
     public static GridPane setNewGrid() {

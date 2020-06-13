@@ -20,16 +20,17 @@ public class ReleventsApp extends Application {
 
     private static volatile ReleventsApp instance;
     private DatabaseConnectionHandler dbHandler = null;
-    String email = LoginWindow.getInstance().userEmail;
-    Event[] userEvents = ReleventsApp.getInstance().getDbHandler().userEvents(email);
+    private String email = null;
+    private Event[] userEvents = null;
 
     public ReleventsApp() {
         dbHandler = new DatabaseConnectionHandler();
     }
 
     public void start(Stage primaryStage) throws Exception {
+
         // testing database connection
-        boolean didConnect = dbHandler.login("ora_brucecui", "a13412151");
+        boolean didConnect = dbHandler.login("ora_rickyma", "a82943424");
         if (didConnect) {
 
             Timestamp t1 = new Timestamp(2020,6,20,14,0,0,0);
@@ -62,6 +63,9 @@ public class ReleventsApp extends Application {
         app.dbHandler = dbHandler;
         instance = app;
 
+        String email = LoginWindow.getInstance().userEmail;
+        Event[] userEvents = dbHandler.userEvents(email);
+
         HBox hbButtons = GUISetup.navButtons(primaryStage);
         VBox vbCenter = new VBox();
         Label title = new Label("Home");
@@ -80,6 +84,9 @@ public class ReleventsApp extends Application {
         primaryStage.show();
 
     }
+
+
+
 
     public DatabaseConnectionHandler getDbHandler() {
         return dbHandler;
