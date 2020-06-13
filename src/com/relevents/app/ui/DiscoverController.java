@@ -13,7 +13,7 @@ public class DiscoverController extends Application {
     // This method, when called, will receive the original primary stage
 // on which a new scene will then be attached
     public void start(Stage primaryStage) {
-        HBox hbButtons = ReleventsApp.navButtons(primaryStage);
+        HBox hbButtons = GUISetup.navButtons(primaryStage);
 
         VBox vbCenter = new VBox();
         Label title = new Label("Discover");
