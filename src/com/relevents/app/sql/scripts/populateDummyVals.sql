@@ -106,41 +106,43 @@ INSERT INTO DESCRIBES (TOPICNAME, EVENTID)
 
 INSERT INTO PREFERS (EMAIL, TOPICNAME)
     WITH names (EMAIL, TOPICNAME) AS (
-        SELECT 1, 'Art' FROM dual UNION ALL
-        SELECT 2, 'Soccer' FROM dual UNION ALL
-        SELECT 3, 'Music' FROM dual UNION ALL
-        SELECT 4, 'Sports' FROM dual UNION ALL
-        SELECT 5, 'Basketball' FROM dual
+        SELECT 'ricky.ma@alumni.ubc.ca', 'Art' FROM dual UNION ALL
+        SELECT 'johnny@hotmail.com', 'Soccer' FROM dual UNION ALL
+        SELECT 'painting101@gmail.com', 'Music' FROM dual UNION ALL
+        SELECT 'bonappetit@yum.com', 'Sports' FROM dual UNION ALL
+        SELECT 'will@smith.com', 'Basketball' FROM dual UNION ALL
+        SELECT 'ricky.ma@alumni.ubc.ca', 'Music' FROM dual
     )
     SELECT * FROM names;
 
 INSERT INTO FOLLOWS (EMAIL, ORGANIZATIONID)
     WITH names (EMAIL, ORGANIZATIONID) AS (
-        SELECT 1, 1 FROM dual UNION ALL
-        SELECT 2, 2 FROM dual UNION ALL
-        SELECT 3, 3 FROM dual UNION ALL
-        SELECT 4, 4 FROM dual UNION ALL
-        SELECT 5, 5 FROM dual
+        SELECT 'ricky.ma@alumni.ubc.ca', 1 FROM dual UNION ALL
+        SELECT 'johnny@hotmail.com', 2 FROM dual UNION ALL
+        SELECT 'painting101@gmail.com', 3 FROM dual UNION ALL
+        SELECT 'bonappetit@yum.com', 4 FROM dual UNION ALL
+        SELECT 'will@smith.com', 5 FROM dual
     )
     SELECT * FROM names;
 
 INSERT INTO MANAGES (EMAIL, ORGANIZATIONID, EVENTID)
     WITH names (EMAIL, ORGANIZATIONID, EVENTID) AS (
-        SELECT 1, 1, 1 FROM dual UNION ALL
-        SELECT 2, 2, 2 FROM dual UNION ALL
-        SELECT 3, 3, 3 FROM dual UNION ALL
-        SELECT 4, 4, 4 FROM dual UNION ALL
-        SELECT 5, 5, 5 FROM dual
+        SELECT 'ricky.ma@alumni.ubc.ca', 1, 1 FROM dual UNION ALL
+        SELECT 'ricky.ma@alumni.ubc.ca', 2, 2 FROM dual UNION ALL
+        SELECT 'johnny@hotmail.com', 2, 2 FROM dual UNION ALL
+        SELECT 'painting101@gmail.com', 3, 3 FROM dual UNION ALL
+        SELECT 'bonappetit@yum.com', 4, 4 FROM dual UNION ALL
+        SELECT 'will@smith.com', 5, 5 FROM dual
     )
     SELECT * FROM names;
 
 INSERT INTO ATTENDS (EMAIL, EVENTID)
     WITH names (EMAIL, EVENTID) AS (
-        SELECT 1, 1 FROM dual UNION ALL
-        SELECT 2, 2 FROM dual UNION ALL
-        SELECT 3, 3 FROM dual UNION ALL
-        SELECT 4, 4 FROM dual UNION ALL
-        SELECT 5, 5 FROM dual
+        SELECT 'ricky.ma@alumni.ubc.ca', 1 FROM dual UNION ALL
+        SELECT 'johnny@hotmail.com', 2 FROM dual UNION ALL
+        SELECT 'painting101@gmail.com', 3 FROM dual UNION ALL
+        SELECT 'bonappetit@yum.com', 4 FROM dual UNION ALL
+        SELECT 'will@smith.com', 5 FROM dual
     )
     SELECT * FROM names;
 

@@ -476,8 +476,38 @@ public class DatabaseConnectionHandler {
 
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT O.ORGANIZATIONID, O.ORGNAME, O.DESCRIPTION, " +
-                    "O.EMAIL, O.WEBSITE FROM ORGANIZATION O, APPUSER USER, MANAGES M WHERE USER.EMAIL = ? " +
-                    "AND USER.EMAIL = M.EMAIL AND O.ORGANIZATIONID = M.ORGANIZATIONID");
+                    "O.EMAIL, O.WEBSITE FROM ORGANIZATION O, APPUSER U, MANAGES M WHERE U.EMAIL = ? " +
+                    "AND U.EMAIL = M.EMAIL AND O.ORGANIZATIONID = M.ORGANIZATIONID");
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Organization model = new Organization(rs.getInt("organizationID"),
+                        rs.getString("orgName"),
+                        rs.getString("description"),
+                        rs.getString("email"),
+                        rs.getString("website")
+                );
+                result.add(model);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new Organization[result.size()]);
+    }
+
+    // retrieve all organizations a user follows
+    public Organization[] userFollows(String email) {
+        ArrayList<Organization> result = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT O.ORGANIZATIONID, O.ORGNAME, O.DESCRIPTION, " +
+                    "O.EMAIL, O.WEBSITE FROM ORGANIZATION O, APPUSER U, FOLLOWS F WHERE U.EMAIL = ? " +
+                    "AND U.EMAIL = F.EMAIL AND O.ORGANIZATIONID = F.ORGANIZATIONID");
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
 
@@ -529,6 +559,25 @@ public class DatabaseConnectionHandler {
         }
 
         return result.toArray(new Event[result.size()]);
+    }
+
+    // retrieve all topics a user prefers
+    public String[] userTopics(String email) {
+        ArrayList<String> result = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT P.TOPICNAME FROM PREFERS P, APPUSER APP" +
+                    " WHERE APP.EMAIL = ? AND APP.EMAIL = P.EMAIL");
+            ps.setString(1, email);
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()) {
+                result.add(rs.getString("eventID"));
+            }
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return result.toArray(new String[result.size()]);
     }
 
     // retrieve all the users attending an event

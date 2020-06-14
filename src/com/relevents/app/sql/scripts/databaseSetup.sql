@@ -104,7 +104,7 @@ CREATE TABLE MANAGES (
     eventID integer,
     FOREIGN KEY (email) REFERENCES APPUSER (email),
     FOREIGN KEY (organizationID) REFERENCES ORGANIZATION (organizationID),
-    PRIMARY KEY (organizationID)
+    PRIMARY KEY (email, organizationID)
 );
 
 CREATE TABLE ATTENDS (
