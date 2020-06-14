@@ -65,18 +65,18 @@ public class DatabaseConnectionHandler {
     }
 
     // ---------------------------------------------EVENT FUNCTIONS---------------------------------------------------
-    public void insertEvent(String s, Timestamp start, Timestamp end, String website, String description, Integer id) {
+    public void insertEvent(String s, Timestamp start, Timestamp end, String website, String description, Integer govID, Integer orgID) {
         try {
             PreparedStatement ps = connection.prepareStatement("INSERT INTO " +
-                    "Event(EVENTNAME, EVENTSTART, EVENTEND, WEBSITE, DESCRIPTION, GOVERNINGID) VALUES (?,?,?,?,?,?)");
+                    "Event(EVENTNAME, EVENTSTART, EVENTEND, WEBSITE, DESCRIPTION, GOVERNINGID, ORGANIZATIONID) VALUES (?,?,?,?,?,?,?)");
 //            ps.setInt(1, model.getEventID());
             ps.setString(1, s);
             ps.setTimestamp(2, start);
             ps.setTimestamp(3, end);
             ps.setString(4, website);
             ps.setString(5, description);
-            ps.setInt(6, id);
-
+            ps.setInt(6, govID);
+            ps.setInt(7, orgID);
 
             ps.executeUpdate();
             connection.commit();
@@ -439,9 +439,10 @@ public class DatabaseConnectionHandler {
     public Event[] getOrgEvents(Integer orgID) {
         ArrayList<Event> result = new ArrayList<>();
         try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Event E, ORGANIZATION O, HOSTS H " +
-                    "WHERE O.ORGANIZATIONID=H.ORGANIZATIONID AND H.EVENTID = E.EVENTID");
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM Event E, ORGANIZATION O " +
+                    "WHERE O.ORGANIZATIONID=E.ORGANIZATIONID AND O.ORGANIZATIONID=?");
+            ps.setInt(1, orgID);
+            ResultSet rs = ps.executeQuery();
 
             while(rs.next()) {
                 Event model = new Event(rs.getInt("eventID"),
@@ -455,7 +456,7 @@ public class DatabaseConnectionHandler {
             }
 
             rs.close();
-            stmt.close();
+            ps.close();
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }

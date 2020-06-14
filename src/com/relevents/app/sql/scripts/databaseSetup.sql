@@ -49,8 +49,10 @@ CREATE TABLE EVENT (
     website varchar(50),
     description varchar(4000),
     governingID integer,
+    organizationID integer,
     PRIMARY KEY (eventID),
-    FOREIGN KEY (governingID) REFERENCES GOVERNINGBODY
+    FOREIGN KEY (governingID) REFERENCES GOVERNINGBODY,
+    FOREIGN KEY (organizationID) REFERENCES ORGANIZATION
 );
 
 
@@ -114,14 +116,6 @@ CREATE TABLE ATTENDS (
     FOREIGN KEY (email) REFERENCES APPUSER (email),
     FOREIGN KEY (eventID) REFERENCES EVENT (eventID),
     PRIMARY KEY (email, eventID)
-);
-
-CREATE TABLE HOSTS (
-    organizationID integer,
-    eventID integer,
-    FOREIGN KEY (organizationID) REFERENCES ORGANIZATION,
-    FOREIGN KEY (eventID) REFERENCES EVENT,
-    PRIMARY KEY (organizationID, eventID)
 );
 
 CREATE TABLE HELDAT (

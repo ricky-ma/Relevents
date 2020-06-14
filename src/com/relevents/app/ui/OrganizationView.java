@@ -141,7 +141,8 @@ public class OrganizationView extends Application {
             Timestamp startTime = Timestamp.valueOf(startDate.getValue().atStartOfDay());
             Timestamp endTime = Timestamp.valueOf(endDate.getValue().atStartOfDay());
             ReleventsApp.getInstance().getDbHandler().insertEvent(nameTextField.getText(), startTime, endTime,
-                    websiteTextField.getText(), descriptionTextField.getText(), 3);
+                    websiteTextField.getText(), descriptionTextField.getText(), 3, organization.getOrganizationID());
+            start(primaryStage);
         });
         grid.add(addBtn, 0, 6, 1, 1);
 

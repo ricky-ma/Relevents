@@ -51,13 +51,13 @@ INSERT INTO GOVERNINGBODY (GOVERNINGID, GOVERNINGNAME, EMAIL, PHONE)
     )
     SELECT * FROM names;
 
-INSERT INTO EVENT (eventName, eventStart,eventEnd,website,description,governingID)
-    WITH names (eventName, eventStart,eventEnd,website,description,governingID) AS (
-        SELECT 'eventName1',TO_TIMESTAMP('10-SEP-2014:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),TO_TIMESTAMP('11-SEP-2012:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),'website1','description1',1 FROM dual UNION ALL
-        SELECT 'eventName2', TO_TIMESTAMP('10-SEP-2014:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),TO_TIMESTAMP('12-SEP-2015:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),'website2','description1',2 FROM dual UNION ALL
-        SELECT 'eventName3', TO_TIMESTAMP('10-SEP-2014:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),TO_TIMESTAMP('10-SEP-2014:30:10.123000','DD-MON-RRHH24:MI:SS.FF'),'website3','description3',3 FROM dual UNION ALL
-        SELECT 'eventName4', TO_TIMESTAMP('10-SEP-2014:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),TO_TIMESTAMP('13-SEP-2014:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),'website4','description4',4 FROM dual UNION ALL
-        SELECT 'eventName5', TO_TIMESTAMP('10-SEP-2014:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),TO_TIMESTAMP('10-SEP-2015:00:10.123000','DD-MON-RRHH24:MI:SS.FF'),'website5','description5',5 FROM dual
+INSERT INTO EVENT (eventName, eventStart,eventEnd,website,description,governingID,ORGANIZATIONID)
+    WITH names (eventName, eventStart,eventEnd,website,description,governingID,ORGANIZATIONID) AS (
+        SELECT 'eventName1',TO_TIMESTAMP('10-SEP-2014:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),TO_TIMESTAMP('11-SEP-2012:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),'website1','description1',1,1 FROM dual UNION ALL
+        SELECT 'eventName2', TO_TIMESTAMP('10-SEP-2014:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),TO_TIMESTAMP('12-SEP-2015:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),'website2','description1',2,1 FROM dual UNION ALL
+        SELECT 'eventName3', TO_TIMESTAMP('10-SEP-2014:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),TO_TIMESTAMP('10-SEP-2014:30:10.123000','DD-MON-RRHH24:MI:SS.FF'),'website3','description3',3,2 FROM dual UNION ALL
+        SELECT 'eventName4', TO_TIMESTAMP('10-SEP-2014:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),TO_TIMESTAMP('13-SEP-2014:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),'website4','description4',4,3 FROM dual UNION ALL
+        SELECT 'eventName5', TO_TIMESTAMP('10-SEP-2014:10:10.123000','DD-MON-RRHH24:MI:SS.FF'),TO_TIMESTAMP('10-SEP-2015:00:10.123000','DD-MON-RRHH24:MI:SS.FF'),'website5','description5',5,3 FROM dual
     )
     SELECT * FROM names;
 
@@ -143,16 +143,6 @@ INSERT INTO ATTENDS (EMAIL, EVENTID)
         SELECT 'painting101@gmail.com', 3 FROM dual UNION ALL
         SELECT 'bonappetit@yum.com', 4 FROM dual UNION ALL
         SELECT 'will@smith.com', 5 FROM dual
-    )
-    SELECT * FROM names;
-
-INSERT INTO HOSTS (ORGANIZATIONID, EVENTID)
-    WITH names (ORGANIZATIONID, EVENTID) AS (
-        SELECT 1, 1 FROM dual UNION ALL
-        SELECT 2, 2 FROM dual UNION ALL
-        SELECT 3, 3 FROM dual UNION ALL
-        SELECT 4, 4 FROM dual UNION ALL
-        SELECT 5, 5 FROM dual
     )
     SELECT * FROM names;
 
