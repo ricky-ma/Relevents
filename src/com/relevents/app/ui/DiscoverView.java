@@ -8,10 +8,10 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
-public class DiscoverController extends Application {
+public class DiscoverView extends Application {
 
     // This method, when called, will receive the original primary stage
-// on which a new scene will then be attached
+    // on which a new scene will then be attached
     public void start(Stage primaryStage) {
         HBox hbButtons = GUISetup.navButtons(primaryStage);
 

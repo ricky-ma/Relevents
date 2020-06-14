@@ -16,15 +16,13 @@ import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
 import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.Map;
 
-public class MeController extends Application {
-
-    LoginWindow loginInst = LoginWindow.getInstance();
-    ReleventsApp appInst = ReleventsApp.getInstance();
+public class MeView extends Application {
 
     String email = LoginWindow.getInstance().userEmail;
     User userInfo = ReleventsApp.getInstance().getDbHandler().getOneUserInfo(email);
-
 
     public void start(Stage primaryStage) {
         BorderPane root = new BorderPane();
@@ -35,7 +33,7 @@ public class MeController extends Application {
 
         GUISetup.setSceneTitle(grid, userInfo.getFname() + " " + userInfo.getLname(), FontWeight.EXTRA_BOLD, 2);
         displayUserInfo(grid);
-        displayUserOrganizations(grid);
+        displayUserOrganizations(primaryStage, grid);
         displayUserTopics(grid);
         displayUserFollows(grid);
 
@@ -63,15 +61,22 @@ public class MeController extends Application {
         grid.add(birthdate, 0, 4, 2, 1);
     }
 
-    private void displayUserOrganizations(GridPane grid) {
+    private void displayUserOrganizations(Stage primaryStage, GridPane grid) {
         ListView<String> list = new ListView<>();
+        list.getSelectionModel().clearSelection();
+        list.getItems().clear();
+
+
         Organization[] userOrgs = ReleventsApp.getInstance().getDbHandler().userOrganizations(email);
-        ArrayList<String> orgNames = new ArrayList<>();
+        HashMap<Integer, String> orgMap = new HashMap<>();
         for (Organization org: userOrgs) {
-            orgNames.add(org.getOrgName());
+            orgMap.put(org.getOrganizationID(), org.getOrgName());
         }
-        ObservableList<String> items = FXCollections.observableArrayList(orgNames);
+        ObservableList<String> items = FXCollections.observableArrayList(orgMap.values());
+
         list.setItems(items);
+        list.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldValue, newValue) -> viewOrganization(primaryStage, newValue, orgMap));
 
         Text myOrganizations = new Text("MY ORGANIZATIONS");
         myOrganizations.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
@@ -105,6 +110,23 @@ public class MeController extends Application {
         myOrganizations.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
         grid.add(myOrganizations, 0, 9, 2, 1);
         grid.add(list, 0, 10, 2, 1);
+    }
+
+    private void viewOrganization(Stage primaryStage, String orgName, HashMap<Integer, String> orgMap) {
+        Integer orgID = null;
+        for (Map.Entry<Integer, String> is : orgMap.entrySet()) {
+            if (orgName.equals(is.getValue())) {
+                orgID = is.getKey();
+            }
+        }
+
+        Organization o = ReleventsApp.getInstance().getDbHandler().getOneOrgInfo(orgID);
+        OrganizationView view = new OrganizationView(o);
+        try {
+            view.start(primaryStage);
+        } catch (Exception ex) {
+            ex.printStackTrace();
+        }
     }
 
 }

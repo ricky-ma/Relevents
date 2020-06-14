@@ -342,7 +342,7 @@ public class DatabaseConnectionHandler {
     }
     // ---------------------------------------------ORGANIZATION FUNCTIONS----------------------------------------------
     // TODO
-    public Organization[] getOrganizationInfo(){
+    public Organization[] getOrganizationInfo() {
         ArrayList<Organization> result = new ArrayList<>();
         try {
             Statement stmt = connection.createStatement();
@@ -360,7 +360,6 @@ public class DatabaseConnectionHandler {
 
             }
 
-            //Integer locationID, String locationName, String unit, Integer houseNum, String street, Integer cityID
             while(rs.next()) {
                 Organization model = new Organization(rs.getInt("organizationID"),
                         rs.getString("orgName"),
@@ -378,6 +377,31 @@ public class DatabaseConnectionHandler {
 
         return result.toArray(new Organization[result.size()]);
     }
+
+    public Organization getOneOrgInfo(Integer orgID) {
+        ArrayList<Organization> result = new ArrayList<>();
+        try {
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM ORGANIZATION WHERE ORGANIZATIONID = ?");
+            ps.setInt(1, orgID);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Organization model = new Organization(rs.getInt("organizationID"),
+                        rs.getString("orgName"),
+                        rs.getString("description"),
+                        rs.getString("email"),
+                        rs.getString("website"));
+                result.add(model);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return result.get(0);
+    }
+
     // ---------------------------------------------USER FUNCTIONS------------------------------------------------------
     // TODO
     // retrieve users who attended all events

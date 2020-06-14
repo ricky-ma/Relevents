@@ -44,7 +44,7 @@ public class GUISetup {
 
         Button discoverButton= new Button("Discover");
         discoverButton.setOnAction(e -> {
-            DiscoverController discoverWindow = new DiscoverController();
+            DiscoverView discoverWindow = new DiscoverView();
             discoverWindow.start(primaryStage);
         });
         discoverButton.setPrefSize(120,50);
@@ -52,7 +52,7 @@ public class GUISetup {
 
         Button meButton= new Button("Me");
         meButton.setOnAction(e -> {
-            MeController meWindow = new MeController();
+            MeView meWindow = new MeView();
             meWindow.start(primaryStage);
         });
         meButton.setPrefSize(120,50);
