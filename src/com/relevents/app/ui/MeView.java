@@ -17,7 +17,6 @@ import javafx.stage.Stage;
 
 import java.util.ArrayList;
 import java.util.HashMap;
-import java.util.Map;
 
 public class MeView extends Application {
 
@@ -76,7 +75,7 @@ public class MeView extends Application {
 
         list.setItems(items);
         list.getSelectionModel().selectedItemProperty().addListener(
-                (observable, oldValue, newValue) -> viewOrganization(primaryStage, newValue, orgMap));
+                (observable, oldValue, newValue) -> OrganizationView.view(primaryStage, newValue, orgMap, true));
 
         Text myOrganizations = new Text("MY ORGANIZATIONS");
         myOrganizations.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
@@ -112,21 +111,6 @@ public class MeView extends Application {
         grid.add(list, 0, 10, 2, 1);
     }
 
-    private void viewOrganization(Stage primaryStage, String orgName, HashMap<Integer, String> orgMap) {
-        Integer orgID = null;
-        for (Map.Entry<Integer, String> is : orgMap.entrySet()) {
-            if (orgName.equals(is.getValue())) {
-                orgID = is.getKey();
-            }
-        }
 
-        Organization o = ReleventsApp.getInstance().getDbHandler().getOneOrgInfo(orgID);
-        OrganizationView view = new OrganizationView(o);
-        try {
-            view.start(primaryStage);
-        } catch (Exception ex) {
-            ex.printStackTrace();
-        }
-    }
 
 }

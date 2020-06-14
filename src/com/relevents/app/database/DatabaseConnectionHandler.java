@@ -65,16 +65,18 @@ public class DatabaseConnectionHandler {
     }
 
     // ---------------------------------------------EVENT FUNCTIONS---------------------------------------------------
-    public void insertEvent(Event model) {
+    public void insertEvent(String s, Timestamp start, Timestamp end, String website, String description, Integer id) {
         try {
-            PreparedStatement ps = connection.prepareStatement("INSERT INTO Event VALUES (?,?,?,?,?,?,?)");
-            ps.setInt(1, model.getEventID());
-            ps.setString(2, model.getEventName());
-            ps.setTimestamp(3, model.getEventStart());
-            ps.setTimestamp(4, model.getEventEnd());
-            ps.setString(5, model.getWebsite());
-            ps.setString(6, model.getDescription());
-            ps.setInt(7, model.getGoverningID());
+            PreparedStatement ps = connection.prepareStatement("INSERT INTO " +
+                    "Event(EVENTNAME, EVENTSTART, EVENTEND, WEBSITE, DESCRIPTION, GOVERNINGID) VALUES (?,?,?,?,?,?)");
+//            ps.setInt(1, model.getEventID());
+            ps.setString(1, s);
+            ps.setTimestamp(2, start);
+            ps.setTimestamp(3, end);
+            ps.setString(4, website);
+            ps.setString(5, description);
+            ps.setInt(6, id);
+
 
             ps.executeUpdate();
             connection.commit();
@@ -125,11 +127,43 @@ public class DatabaseConnectionHandler {
         return result.toArray(new Event[result.size()]);
     }
 
-    public void updateEvent(int id, String name) {
+    public Event getOneEventInfo(Integer eventID) {
+        ArrayList<Event> result = new ArrayList<>();
         try {
-            PreparedStatement ps = connection.prepareStatement("UPDATE Event SET eventName = ? WHERE eventID = ?");
-            ps.setString(1, name);
-            ps.setInt(2, id);
+            PreparedStatement ps = connection.prepareStatement("SELECT * FROM EVENT WHERE EVENTID = ?");
+            ps.setInt(1, eventID);
+            ResultSet rs = ps.executeQuery();
+
+            while(rs.next()) {
+                Event model = new Event(rs.getInt("eventID"),
+                        rs.getString("eventName"),
+                        rs.getTimestamp("eventStart"),
+                        rs.getTimestamp("eventEnd"),
+                        rs.getString("website"),
+                        rs.getString("description"),
+                        rs.getInt("governingID"));
+                result.add(model);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return result.get(0);
+    }
+
+    public void updateEvent(int id, Event model) {
+        try {
+            PreparedStatement ps = connection.prepareStatement("UPDATE Event SET eventName=?, EVENTSTART=?, " +
+                    "EVENTEND=?, WEBSITE=?, DESCRIPTION=?, GOVERNINGID=? WHERE eventID = ?");
+            ps.setString(1, model.getEventName());
+            ps.setTimestamp(2, model.getEventStart());
+            ps.setTimestamp(3, model.getEventEnd());
+            ps.setString(4, model.getWebsite());
+            ps.setString(5, model.getDescription());
+            ps.setInt(6, model.getGoverningID());
+            ps.setInt(7, model.getEventID());
 
             int rowCount = ps.executeUpdate();
             if (rowCount == 0) {
@@ -402,6 +436,33 @@ public class DatabaseConnectionHandler {
         return result.get(0);
     }
 
+    public Event[] getOrgEvents(Integer orgID) {
+        ArrayList<Event> result = new ArrayList<>();
+        try {
+            Statement stmt = connection.createStatement();
+            ResultSet rs = stmt.executeQuery("SELECT * FROM Event E, ORGANIZATION O, HOSTS H " +
+                    "WHERE O.ORGANIZATIONID=H.ORGANIZATIONID AND H.EVENTID = E.EVENTID");
+
+            while(rs.next()) {
+                Event model = new Event(rs.getInt("eventID"),
+                        rs.getString("eventName"),
+                        rs.getTimestamp("eventStart"),
+                        rs.getTimestamp("eventEnd"),
+                        rs.getString("website"),
+                        rs.getString("description"),
+                        rs.getInt("governingID"));
+                result.add(model);
+            }
+
+            rs.close();
+            stmt.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+
+        return result.toArray(new Event[result.size()]);
+    }
+
     // ---------------------------------------------USER FUNCTIONS------------------------------------------------------
     // TODO
     // retrieve users who attended all events
@@ -594,7 +655,7 @@ public class DatabaseConnectionHandler {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
             while(rs.next()) {
-                result.add(rs.getString("eventID"));
+                result.add(rs.getString("TOPICNAME"));
             }
             rs.close();
             ps.close();

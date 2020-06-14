@@ -42,13 +42,14 @@ CREATE TABLE GOVERNINGBODY (
 );
 
 CREATE TABLE EVENT (
-    eventID integer PRIMARY KEY,
+    eventID integer GENERATED ALWAYS AS IDENTITY,
     eventName varchar(50),
     eventStart timestamp,
     eventEnd timestamp,
     website varchar(50),
     description varchar(4000),
     governingID integer,
+    PRIMARY KEY (eventID),
     FOREIGN KEY (governingID) REFERENCES GOVERNINGBODY
 );
 
