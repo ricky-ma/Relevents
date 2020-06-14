@@ -19,6 +19,12 @@ public class Event {
     private final String description;
     private final Integer governingID;
 
+    public Integer getOrganizationID() {
+        return organizationID;
+    }
+
+    private final Integer organizationID;
+
     public ArrayList<Triplet<Integer, String, String>> FAQs;
     public ArrayList<Quartet<Integer, String, String, String>> foods;
     public Quartet<Integer, String, String, String> governingBody;
@@ -26,7 +32,7 @@ public class Event {
     public ArrayList<String> topics;
     public Location location;
 
-    public Event(Integer eventID, String eventName, Timestamp eventStart, Timestamp eventEnd, String website, String description, Integer governingID) {
+    public Event(Integer eventID, String eventName, Timestamp eventStart, Timestamp eventEnd, String website, String description, Integer governingID, Integer organizationID) {
         this.eventID = eventID;
         this.eventName = eventName;
         this.eventStart = eventStart;
@@ -34,6 +40,7 @@ public class Event {
         this.website = website;
         this.description = description;
         this.governingID = governingID;
+        this.organizationID = organizationID;
     }
 
     public Integer getEventID() {

@@ -246,7 +246,8 @@ public class DatabaseConnectionHandler {
                     rs.getTimestamp("eventEnd"),
                     rs.getString("website"),
                     rs.getString("description"),
-                    rs.getInt("governingID"));
+                    rs.getInt("governingID"),
+                    rs.getInt("organizationID"));
             result.add(model);
         }
 

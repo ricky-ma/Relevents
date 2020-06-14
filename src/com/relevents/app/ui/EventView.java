@@ -1,11 +1,13 @@
 package com.relevents.app.ui;
 
 import com.relevents.app.model.Event;
+import com.relevents.app.model.Organization;
 import com.relevents.app.model.User;
 import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
@@ -38,6 +40,7 @@ public class EventView extends Application {
         GUISetup.setSceneTitle(grid, event.getEventName(), FontWeight.EXTRA_BOLD, 2);
         displayEventInfo(grid);
         displayEventAttendees(grid);
+        if (manager) { displayDeleteButton(primaryStage, grid);}
 //        displayUserTopics(grid);
 //        displayUserFollows(grid);
 
@@ -99,7 +102,37 @@ public class EventView extends Application {
         grid.add(list, 0, 6, 2, 1);
     }
 
-    public boolean isManager() {
-        return manager;
+    private void displayDeleteButton(Stage primaryStage, GridPane grid) {
+        Button deleteEventBtn = new Button("Delete event");
+        deleteEventBtn.setOnAction(e -> {
+            ReleventsApp.getInstance().getDbHandler().deleteEvent(event.getEventID());
+            Organization org = ReleventsApp.getInstance().getDbHandler().getOneOrgInfo(event.getOrganizationID());
+            OrganizationView view = new OrganizationView(org, manager);
+            view.start(primaryStage);
+        });
+        grid.add(deleteEventBtn, 0, 7, 1, 1);
     }
+
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

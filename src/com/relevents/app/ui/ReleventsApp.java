@@ -79,9 +79,6 @@ public class ReleventsApp extends Application {
 
     }
 
-
-
-
     public DatabaseConnectionHandler getDbHandler() {
         return dbHandler;
     }
