@@ -20,7 +20,7 @@ public class LoginWindow extends Application {
     public String userEmail;
     private static volatile LoginWindow instance;
 
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
         GridPane grid = new GridPane();
         grid.setAlignment(Pos.CENTER);
         grid.setHgap(10);
@@ -67,10 +67,6 @@ public class LoginWindow extends Application {
         primaryStage.setScene(scene);
         primaryStage.setTitle("RELEVENTS");
         primaryStage.show();
-    }
-
-    public String getUserEmail() {
-        return userEmail;
     }
 
     public static LoginWindow getInstance() {

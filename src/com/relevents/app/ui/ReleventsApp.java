@@ -13,15 +13,15 @@ import javafx.stage.Stage;
 public class ReleventsApp extends Application {
 
     private static volatile ReleventsApp instance;
-    private DatabaseConnectionHandler dbHandler = null;
-    private String email = null;
-    private Event[] userEvents = null;
+    private DatabaseConnectionHandler dbHandler;
+    private final String email = null;
+    private final Event[] userEvents = null;
 
     public ReleventsApp() {
         dbHandler = new DatabaseConnectionHandler();
     }
 
-    public void start(Stage primaryStage) throws Exception {
+    public void start(Stage primaryStage) {
 
         // testing database connection
         boolean didConnect = dbHandler.login("ora_rickyma", "a82943424");
@@ -93,7 +93,7 @@ public class ReleventsApp extends Application {
         return instance;
     }
 
-    public static void main(String[] args) throws Exception{
+    public static void main(String[] args) {
         System.out.println("Hello World, Java app");
 //        ReleventsApp app = new ReleventsApp();
         launch(LoginWindow.class, args);

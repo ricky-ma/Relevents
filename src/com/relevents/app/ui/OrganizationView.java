@@ -106,9 +106,7 @@ public class OrganizationView extends Application {
 
     private void addEventButton(Stage primaryStage, GridPane grid) {
         Button addEvent= new Button("Add event");
-        addEvent.setOnAction(e -> {
-            newEvent(primaryStage);
-        });
+        addEvent.setOnAction(e -> newEvent(primaryStage));
         grid.add(addEvent, 0, 6, 2, 1);
     }
 
@@ -120,7 +118,7 @@ public class OrganizationView extends Application {
         root.setCenter(grid);
 
         GUISetup.setSceneTitle(grid, "INPUT EVENT INFO", FontWeight.EXTRA_BOLD, 2);
-        TextField nameTextField = getTextField(grid, "Name:", "",1, ".*");
+        TextField nameTextField = getTextField(grid, "Name:", 1);
 
         Label start = new Label("Start:");
         grid.add(start, 0, 2,1,1);
@@ -132,8 +130,8 @@ public class OrganizationView extends Application {
         DatePicker endDate = new DatePicker();
         grid.add(endDate, 1, 3, 1, 1);
 
-        TextField websiteTextField = getTextField(grid, "Website:", "",4, ".*");
-        TextField descriptionTextField = getTextField(grid, "Description:", "",5, ".*");
+        TextField websiteTextField = getTextField(grid, "Website:", 4);
+        TextField descriptionTextField = getTextField(grid, "Description:", 5);
 
 
         Button addBtn = new Button("Add");
@@ -153,13 +151,13 @@ public class OrganizationView extends Application {
         primaryStage.show();
     }
 
-    private TextField getTextField(GridPane grid, String s0, String s1, int i, String s2) {
+    private TextField getTextField(GridPane grid, String s0, int i) {
         Label name = new Label(s0);
         grid.add(name, 0, i,1,1);
-        TextField nameTextField = new TextField(s1);
+        TextField nameTextField = new TextField("");
         grid.add(nameTextField, 1, i);
         nameTextField.setTextFormatter(new TextFormatter<>(change ->
-                (change.getControlNewText().matches(s2)) ? change : null));
+                (change.getControlNewText().matches(".*")) ? change : null));
         return nameTextField;
     }
 

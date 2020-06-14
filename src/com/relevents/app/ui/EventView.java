@@ -37,7 +37,7 @@ public class EventView extends Application {
 
         GUISetup.setSceneTitle(grid, event.getEventName(), FontWeight.EXTRA_BOLD, 2);
         displayEventInfo(grid);
-        displayEventAttendees(primaryStage, grid);
+        displayEventAttendees(grid);
 //        displayUserTopics(grid);
 //        displayUserFollows(grid);
 
@@ -80,7 +80,7 @@ public class EventView extends Application {
         grid.add(description, 0, 4, 2, 1);
     }
 
-    private void displayEventAttendees(Stage primaryStage, GridPane grid) {
+    private void displayEventAttendees(GridPane grid) {
         ListView<String> list = new ListView<>();
         list.getSelectionModel().clearSelection();
         list.getItems().clear();
@@ -97,5 +97,9 @@ public class EventView extends Application {
         myOrganizations.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
         grid.add(myOrganizations, 0, 5, 2, 1);
         grid.add(list, 0, 6, 2, 1);
+    }
+
+    public boolean isManager() {
+        return manager;
     }
 }

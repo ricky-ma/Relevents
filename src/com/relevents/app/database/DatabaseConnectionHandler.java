@@ -107,19 +107,7 @@ public class DatabaseConnectionHandler {
     			System.out.printf("%-15s", rsmd.getColumnName(i + 1));
     		}
 
-            while(rs.next()) {
-                Event model = new Event(rs.getInt("eventID"),
-                        rs.getString("eventName"),
-                        rs.getTimestamp("eventStart"),
-                        rs.getTimestamp("eventEnd"),
-                        rs.getString("website"),
-                        rs.getString("description"),
-                        rs.getInt("governingID"));
-                result.add(model);
-            }
-
-            rs.close();
-            stmt.close();
+            addEventToResult(result, stmt, rs);
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
@@ -134,19 +122,7 @@ public class DatabaseConnectionHandler {
             ps.setInt(1, eventID);
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
-                Event model = new Event(rs.getInt("eventID"),
-                        rs.getString("eventName"),
-                        rs.getTimestamp("eventStart"),
-                        rs.getTimestamp("eventEnd"),
-                        rs.getString("website"),
-                        rs.getString("description"),
-                        rs.getInt("governingID"));
-                result.add(model);
-            }
-
-            rs.close();
-            ps.close();
+            addEventToResult(result, ps, rs);
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
@@ -205,19 +181,7 @@ public class DatabaseConnectionHandler {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Event ORDER BY Eventstart DESC");
 
-            while(rs.next()) {
-                Event model = new Event(rs.getInt("eventID"),
-                        rs.getString("eventName"),
-                        rs.getTimestamp("eventStart"),
-                        rs.getTimestamp("eventEnd"),
-                        rs.getString("website"),
-                        rs.getString("description"),
-                        rs.getInt("governingID"));
-                result.add(model);
-            }
-
-            rs.close();
-            stmt.close();
+            addEventToResult(result, stmt, rs);
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
@@ -232,25 +196,13 @@ public class DatabaseConnectionHandler {
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM EVENT WHERE lower(EVENT.EVENTNAME) LIKE ? " +
                     "UNION SELECT E.EVENTID, E.EVENTNAME, E.EVENTSTART, E.EVENTEND, E.WEBSITE, E.DESCRIPTION, " +
-                    "E.GOVERNINGID FROM EVENT E INNER JOIN DESCRIBES D on E.EVENTID = D.EVENTID WHERE lower(D.TOPICNAME) LIKE ?");
+                    "E.GOVERNINGID, E.ORGANIZATIONID FROM EVENT E INNER JOIN DESCRIBES D on E.EVENTID = D.EVENTID WHERE lower(D.TOPICNAME) LIKE ?");
             String str = "%" + keyword + "%";
             ps.setString(1, str.toLowerCase());
             ps.setString(2, str.toLowerCase());
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
-                Event model = new Event(rs.getInt("eventID"),
-                        rs.getString("eventName"),
-                        rs.getTimestamp("eventStart"),
-                        rs.getTimestamp("eventEnd"),
-                        rs.getString("website"),
-                        rs.getString("description"),
-                        rs.getInt("governingID"));
-                result.add(model);
-            }
-
-            rs.close();
-            ps.close();
+            addEventToResult(result, ps, rs);
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
@@ -278,24 +230,28 @@ public class DatabaseConnectionHandler {
                 System.out.printf("%-15s", rsmd.getColumnName(i + 1));
             }
 
-            while(rs.next()) {
-                Event model = new Event(rs.getInt("eventID"),
-                        rs.getString("eventName"),
-                        rs.getTimestamp("eventStart"),
-                        rs.getTimestamp("eventEnd"),
-                        rs.getString("website"),
-                        rs.getString("description"),
-                        rs.getInt("governingID"));
-                result.add(model);
-            }
-
-            rs.close();
-            stmt.close();
+            addEventToResult(result, stmt, rs);
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
 
         return result.toArray(new Event[result.size()]);
+    }
+
+    private void addEventToResult(ArrayList<Event> result, Statement stmt, ResultSet rs) throws SQLException {
+        while(rs.next()) {
+            Event model = new Event(rs.getInt("eventID"),
+                    rs.getString("eventName"),
+                    rs.getTimestamp("eventStart"),
+                    rs.getTimestamp("eventEnd"),
+                    rs.getString("website"),
+                    rs.getString("description"),
+                    rs.getInt("governingID"));
+            result.add(model);
+        }
+
+        rs.close();
+        stmt.close();
     }
 
     // ---------------------------------------------LOCATION FUNCTIONS--------------------------------------------------
@@ -417,19 +373,7 @@ public class DatabaseConnectionHandler {
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT * FROM ORGANIZATION WHERE ORGANIZATIONID = ?");
             ps.setInt(1, orgID);
-            ResultSet rs = ps.executeQuery();
-
-            while(rs.next()) {
-                Organization model = new Organization(rs.getInt("organizationID"),
-                        rs.getString("orgName"),
-                        rs.getString("description"),
-                        rs.getString("email"),
-                        rs.getString("website"));
-                result.add(model);
-            }
-
-            rs.close();
-            ps.close();
+            addOrgToResult(result, ps);
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
@@ -444,24 +388,28 @@ public class DatabaseConnectionHandler {
             ps.setInt(1, orgID);
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
-                Event model = new Event(rs.getInt("eventID"),
-                        rs.getString("eventName"),
-                        rs.getTimestamp("eventStart"),
-                        rs.getTimestamp("eventEnd"),
-                        rs.getString("website"),
-                        rs.getString("description"),
-                        rs.getInt("governingID"));
-                result.add(model);
-            }
-
-            rs.close();
-            ps.close();
+            addEventToResult(result, ps, rs);
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
 
         return result.toArray(new Event[result.size()]);
+    }
+
+    private void addOrgToResult(ArrayList<Organization> result, PreparedStatement ps) throws SQLException {
+        ResultSet rs = ps.executeQuery();
+
+        while(rs.next()) {
+            Organization model = new Organization(rs.getInt("organizationID"),
+                    rs.getString("orgName"),
+                    rs.getString("description"),
+                    rs.getString("email"),
+                    rs.getString("website"));
+            result.add(model);
+        }
+
+        rs.close();
+        ps.close();
     }
 
     // ---------------------------------------------USER FUNCTIONS------------------------------------------------------
@@ -485,18 +433,7 @@ public class DatabaseConnectionHandler {
                 System.out.printf("%-15s", rsmd.getColumnName(i + 1));
             }
 
-            while(rs.next()) {
-                User model = new User(rs.getString("EMAIL"),
-                        rs.getString("FNAME"),
-                        rs.getString("LNAME"),
-                        rs.getDate("BIRTHDATE"),
-                        rs.getString("PHONE"),
-                        rs.getInt("CITYID"));
-                result.add(model);
-            }
-
-            rs.close();
-            stmt.close();
+            addUserToResult(result, stmt, rs);
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
@@ -511,18 +448,7 @@ public class DatabaseConnectionHandler {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
-                User model = new User(rs.getString("EMAIL"),
-                        rs.getString("FNAME"),
-                        rs.getString("LNAME"),
-                        rs.getDate("BIRTHDATE"),
-                        rs.getString("PHONE"),
-                        rs.getInt("CITYID"));
-                result.add(model);
-            }
-
-            rs.close();
-            ps.close();
+            addUserToResult(result, ps, rs);
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
@@ -537,18 +463,7 @@ public class DatabaseConnectionHandler {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM APPUSER");
 
-            while(rs.next()) {
-                User model = new User(rs.getString("EMAIL"),
-                        rs.getString("FNAME"),
-                        rs.getString("LNAME"),
-                        rs.getDate("BIRTHDATE"),
-                        rs.getString("PHONE"),
-                        rs.getInt("CITYID"));
-                result.add(model);
-            }
-
-            rs.close();
-            stmt.close();
+            addUserToResult(result, stmt, rs);
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
@@ -565,20 +480,7 @@ public class DatabaseConnectionHandler {
                     "O.EMAIL, O.WEBSITE FROM ORGANIZATION O, APPUSER U, MANAGES M WHERE U.EMAIL = ? " +
                     "AND U.EMAIL = M.EMAIL AND O.ORGANIZATIONID = M.ORGANIZATIONID");
             ps.setString(1, email);
-            ResultSet rs = ps.executeQuery();
-
-            while(rs.next()) {
-                Organization model = new Organization(rs.getInt("organizationID"),
-                        rs.getString("orgName"),
-                        rs.getString("description"),
-                        rs.getString("email"),
-                        rs.getString("website")
-                );
-                result.add(model);
-            }
-
-            rs.close();
-            ps.close();
+            addOrgToResult(result, ps);
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
@@ -595,20 +497,7 @@ public class DatabaseConnectionHandler {
                     "O.EMAIL, O.WEBSITE FROM ORGANIZATION O, APPUSER U, FOLLOWS F WHERE U.EMAIL = ? " +
                     "AND U.EMAIL = F.EMAIL AND O.ORGANIZATIONID = F.ORGANIZATIONID");
             ps.setString(1, email);
-            ResultSet rs = ps.executeQuery();
-
-            while(rs.next()) {
-                Organization model = new Organization(rs.getInt("organizationID"),
-                        rs.getString("orgName"),
-                        rs.getString("description"),
-                        rs.getString("email"),
-                        rs.getString("website")
-                );
-                result.add(model);
-            }
-
-            rs.close();
-            ps.close();
+            addOrgToResult(result, ps);
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
@@ -627,19 +516,7 @@ public class DatabaseConnectionHandler {
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
-                Event model = new Event(rs.getInt("eventID"),
-                        rs.getString("eventName"),
-                        rs.getTimestamp("eventStart"),
-                        rs.getTimestamp("eventEnd"),
-                        rs.getString("website"),
-                        rs.getString("description"),
-                        rs.getInt("governingID"));
-                result.add(model);
-            }
-
-            rs.close();
-            ps.close();
+            addEventToResult(result, ps, rs);
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
@@ -678,23 +555,27 @@ public class DatabaseConnectionHandler {
             ps.setInt(1, eventID);
             ResultSet rs = ps.executeQuery();
 
-            while(rs.next()) {
-                User model = new User(rs.getString("EMAIL"),
-                        rs.getString("FNAME"),
-                        rs.getString("LNAME"),
-                        rs.getDate("BIRTHDATE"),
-                        rs.getString("PHONE"),
-                        rs.getInt("CITYID"));
-                result.add(model);
-            }
-
-            rs.close();
-            ps.close();
+            addUserToResult(result, ps, rs);
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
 
         return result.toArray(new User[result.size()]);
+    }
+
+    private void addUserToResult(ArrayList<User> result, Statement stmt, ResultSet rs) throws SQLException {
+        while(rs.next()) {
+            User model = new User(rs.getString("EMAIL"),
+                    rs.getString("FNAME"),
+                    rs.getString("LNAME"),
+                    rs.getDate("BIRTHDATE"),
+                    rs.getString("PHONE"),
+                    rs.getInt("CITYID"));
+            result.add(model);
+        }
+
+        rs.close();
+        stmt.close();
     }
 
 
