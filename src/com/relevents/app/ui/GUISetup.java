@@ -35,7 +35,7 @@ public class GUISetup {
 
         Button homeButton= new Button("Home");
         homeButton.setOnAction(e -> {
-            ReleventsApp homeWindow = new ReleventsApp();
+            ReleventsApp homeWindow = ReleventsApp.getInstance();
             try {
                 homeWindow.start(primaryStage);
             } catch (Exception ex) {

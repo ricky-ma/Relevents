@@ -45,7 +45,6 @@ public class OrganizationView extends Application {
         if (manager) { addEventButton(primaryStage, grid); }
 
         Scene scene = new Scene(root, 360, 640);
-
         primaryStage.setTitle("RELEVENTS");
         primaryStage.setScene(scene);
         primaryStage.show();

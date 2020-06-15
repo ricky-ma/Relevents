@@ -16,6 +16,10 @@ public class DatabaseConnectionHandler {
     private static final String EXCEPTION_TAG = "[EXCEPTION]";
     private static final String WARNING_TAG = "[WARNING]";
 
+    public Connection getConnection() {
+        return connection;
+    }
+
     private Connection connection = null;
 
     public DatabaseConnectionHandler() {
@@ -215,8 +219,9 @@ public class DatabaseConnectionHandler {
         try {
             PreparedStatement ps = connection.prepareStatement("select *\n" +
                     "from Event, Attends\n" +
-                    "where EVENTSTART=(select min(EventStart) from Event)\n" +
-                    "and ATTENDS.EMAIL = ? and EVENT.EVENTID = ATTENDS.EVENTID");
+                    "where rownum=1 \n" +
+                    "and ATTENDS.EMAIL = ? and EVENT.EVENTID = ATTENDS.EVENTID\n" +
+                    "order by EVENT.EVENTSTART");
             ps.setString(1, userEmail);
             ResultSet rs = ps.executeQuery();
             addEventToResult(result, ps, rs);

@@ -1,6 +1,5 @@
 package com.relevents.app.ui;
 
-import com.relevents.app.model.Event;
 import com.relevents.app.model.Organization;
 import com.relevents.app.model.User;
 import javafx.application.Application;
@@ -37,10 +36,8 @@ public class MeView extends Application {
         displayUserOrganizations(primaryStage, grid);
         displayUserTopics(grid);
         displayUserFollows(grid);
-        displayUserEvents(grid);
 
         Scene scene = new Scene(root, 360, 640);
-
         primaryStage.setTitle("RELEVENTS");
         primaryStage.setScene(scene);
         primaryStage.show();
@@ -114,22 +111,4 @@ public class MeView extends Application {
         grid.add(myOrganizations, 0, 9, 2, 1);
         grid.add(list, 0, 10, 2, 1);
     }
-
-    private void displayUserEvents(GridPane grid) {
-        ListView<String> list = new ListView<>();
-        Event[] eventInfoTable = ReleventsApp.getInstance().getDbHandler().userEvents(email);
-        ArrayList<String> eventNames = new ArrayList<>();
-        for (Event event : eventInfoTable) {
-            eventNames.add(event.getEventName());
-        }
-        ObservableList<String> items = FXCollections.observableArrayList(eventNames);
-        list.setItems(items);
-
-        Text myEvents = new Text("My Events");
-        myEvents.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
-        grid.add(myEvents, 0, 11, 2, 1);
-        grid.add(list, 0, 12, 2, 1);
-    }
-
-
 }

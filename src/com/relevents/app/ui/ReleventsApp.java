@@ -3,79 +3,48 @@ package com.relevents.app.ui;
 import com.relevents.app.database.DatabaseConnectionHandler;
 import com.relevents.app.model.Event;
 import javafx.application.Application;
+import javafx.collections.FXCollections;
+import javafx.collections.ObservableList;
 import javafx.scene.Scene;
-import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
 import javafx.scene.layout.BorderPane;
+import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.VBox;
+import javafx.scene.text.Font;
+import javafx.scene.text.FontWeight;
+import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
-import java.util.Arrays;
+import java.util.ArrayList;
 
 public class ReleventsApp extends Application {
 
     private static volatile ReleventsApp instance;
-    private DatabaseConnectionHandler dbHandler;
-    private final String email = null;
-    private final Event[] userEvents = null;
+    private static DatabaseConnectionHandler dbHandler;
+    String email = LoginWindow.getInstance().userEmail;
 
     public ReleventsApp() {
         dbHandler = new DatabaseConnectionHandler();
     }
 
     public void start(Stage primaryStage) {
-
         // testing ricky.ma@alumni.ubc.caricky.ma@alumni.ubc.cadatabase connection
-        boolean didConnect = dbHandler.login("ora_brucecui", "a13412151");
-        if (didConnect) {
-
-//            Timestamp t1 = new Timestamp(2020,6,20,14,0,0,0);
-//            Timestamp t2 = new Timestamp(2020,6,21,14,0,0,0);
-//            Event e1 = new Event(13, "party", t1, t2, "www.events.com", "description", 1);
-//            dbHandler.insertEvent(e1);
-//
-//            Event[] eventInfoTable = dbHandler.getEventInfo();
-//            System.out.println(Arrays.toString(eventInfoTable));
-//
-//            dbHandler.deleteEvent(13);
-//            Event[] eventInfoTable2 = dbHandler.getEventInfo();
-//            System.out.println(Arrays.toString(eventInfoTable2));
-//
-//            Event[] eventInfoTable3 = dbHandler.earliestEvent();
-//            System.out.println(Arrays.toString(eventInfoTable3));
-//
-//            Location[] locationInfoTable = dbHandler.getLocationInfo();
-//            System.out.println(Arrays.toString(locationInfoTable));
-//
-//            Organization[] organizationInfoTable = dbHandler.getOrganizationInfo();
-//            System.out.println(Arrays.toString(organizationInfoTable));
-//
-//            CityUser[] cityUserInfoTable = dbHandler.cityUsers();
-//            System.out.println(Arrays.toString(cityUserInfoTable));
-
-//            Event[] userEventTable = dbHandler.userEvents("ricky.ma@alumni.ubc.ca");
-//            System.out.println(Arrays.toString(userEventTable ));
+        if (dbHandler.getConnection() == null) {
+            ReleventsApp app = new ReleventsApp();
+            app.getDbHandler().login("ora_rickyma", "a82943424");
+            instance = app;
         }
 
-        ReleventsApp app = new ReleventsApp();
-        app.dbHandler = dbHandler;
-        instance = app;
-
-        String email = LoginWindow.getInstance().userEmail;
-        Event[] userEvents = dbHandler.userEvents(email);
-
-        HBox hbButtons = GUISetup.navButtons(primaryStage);
-        VBox vbCenter = new VBox();
-        Label title = new Label("Home");
-        vbCenter.getChildren().addAll(title);
-
         BorderPane root = new BorderPane();
-        root.setCenter(vbCenter);
+        GridPane grid = GUISetup.setNewGrid();
+        HBox hbButtons = GUISetup.navButtons(primaryStage);
         root.setBottom(hbButtons);
+        root.setCenter(grid);
+
+        displayNextEvent(grid);
+        displayUserEvents(grid);
 
         Scene scene = new Scene(root, 360, 640);
-//        scene.getStylesheets().add("file:///stylesheet");
-
         primaryStage.setTitle("RELEVENTS");
         primaryStage.setScene(scene);
         primaryStage.setResizable(false);
@@ -94,11 +63,49 @@ public class ReleventsApp extends Application {
         return instance;
     }
 
-    public static void main(String[] args) {
-        System.out.println("Hello World, Java app");
-//        ReleventsApp app = new ReleventsApp();
-        launch(LoginWindow.class, args);
+    private void displayNextEvent(GridPane grid) {
+        Event nextEvent = dbHandler.nextUserEvent(email);
 
+        Text nextEventTxt = new Text("Next Event");
+        nextEventTxt.setFont(Font.font("Helvetica", FontWeight.BOLD, 30));
+        grid.add(nextEventTxt, 0, 0, 2, 1);
+
+        Text eventName = new Text(nextEvent.getEventName());
+        eventName.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
+        Text start = new Text("START: " + nextEvent.getEventStart());
+        start.setFont(Font.font("Helvetica", FontWeight.SEMI_BOLD, 15));
+        Text end = new Text("END: " + nextEvent.getEventEnd());
+        end.setFont(Font.font("Helvetica", FontWeight.SEMI_BOLD, 15));
+        Text website = new Text("WEBSITE: " + nextEvent.getWebsite());
+        website.setFont(Font.font("Helvetica", FontWeight.SEMI_BOLD, 15));
+        Text description = new Text("DESCRIPTION: " + nextEvent.getDescription());
+        description.setFont(Font.font("Helvetica", FontWeight.SEMI_BOLD, 15));
+
+        grid.add(eventName, 0, 1, 2, 1);
+        grid.add(start, 0, 2, 2, 1);
+        grid.add(end, 0, 3, 2, 1);
+        grid.add(website, 0, 4, 2, 1);
+        grid.add(description, 0, 5, 2, 1);
     }
 
+    private void displayUserEvents(GridPane grid) {
+        ListView<String> list = new ListView<>();
+        Event[] eventInfoTable = dbHandler.userEvents(email);
+        ArrayList<String> eventNames = new ArrayList<>();
+        for (Event event : eventInfoTable) {
+            eventNames.add(event.getEventName());
+        }
+        ObservableList<String> items = FXCollections.observableArrayList(eventNames);
+        list.setItems(items);
+
+        Text myEvents = new Text("My Events");
+        myEvents.setFont(Font.font("Helvetica", FontWeight.BOLD, 25));
+        grid.add(myEvents, 0, 6, 2, 1);
+        grid.add(list, 0, 7, 2, 1);
+    }
+
+    public static void main(String[] args) {
+        System.out.println("Hello World, Java app");
+        launch(LoginWindow.class, args);
+    }
 }
