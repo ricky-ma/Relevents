@@ -118,7 +118,7 @@ public class OrganizationView extends Application {
         root.setCenter(grid);
 
         GUISetup.setSceneTitle(grid, "INPUT EVENT INFO", FontWeight.EXTRA_BOLD, 2);
-        TextField nameTextField = getTextField(grid, "Name:", 1);
+        TextField nameTextField = GUISetup.getTextField(grid, "Name:", "",1);
 
         Label start = new Label("Start:");
         grid.add(start, 0, 2,1,1);
@@ -130,8 +130,8 @@ public class OrganizationView extends Application {
         DatePicker endDate = new DatePicker();
         grid.add(endDate, 1, 3, 1, 1);
 
-        TextField websiteTextField = getTextField(grid, "Website:", 4);
-        TextField descriptionTextField = getTextField(grid, "Description:", 5);
+        TextField websiteTextField = GUISetup.getTextField(grid, "Website:", "",4);
+        TextField descriptionTextField = GUISetup.getTextField(grid, "Description:", "",5);
 
 
         Button addBtn = new Button("Add");
@@ -145,21 +145,12 @@ public class OrganizationView extends Application {
         grid.add(addBtn, 0, 6, 1, 1);
 
         Scene scene = new Scene(root, 360, 640);
-
         primaryStage.setTitle("RELEVENTS");
         primaryStage.setScene(scene);
         primaryStage.show();
     }
 
-    private TextField getTextField(GridPane grid, String s0, int i) {
-        Label name = new Label(s0);
-        grid.add(name, 0, i,1,1);
-        TextField nameTextField = new TextField("");
-        grid.add(nameTextField, 1, i);
-        nameTextField.setTextFormatter(new TextFormatter<>(change ->
-                (change.getControlNewText().matches(".*")) ? change : null));
-        return nameTextField;
-    }
+
 
 
 }

@@ -3,6 +3,9 @@ package com.relevents.app.ui;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
+import javafx.scene.control.TextFormatter;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.text.Font;
@@ -60,6 +63,16 @@ public class GUISetup {
 
         hbButtons.setAlignment(Pos.CENTER);
         return hbButtons;
+    }
+
+    public static TextField getTextField(GridPane grid, String s0, String s1, int i) {
+        Label name = new Label(s0);
+        grid.add(name, 0, i,1,1);
+        TextField nameTextField = new TextField(s1);
+        grid.add(nameTextField, 1, i);
+        nameTextField.setTextFormatter(new TextFormatter<>(change ->
+                (change.getControlNewText().matches(".*")) ? change : null));
+        return nameTextField;
     }
 
 }

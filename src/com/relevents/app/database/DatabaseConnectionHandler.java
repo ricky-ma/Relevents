@@ -81,8 +81,8 @@ public class DatabaseConnectionHandler {
             ps.executeUpdate();
             connection.commit();
             System.out.println("inserted");
-
             ps.close();
+
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
@@ -250,7 +250,6 @@ public class DatabaseConnectionHandler {
                     rs.getInt("organizationID"));
             result.add(model);
         }
-
         rs.close();
         stmt.close();
     }

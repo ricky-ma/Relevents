@@ -7,8 +7,7 @@ import javafx.application.Application;
 import javafx.collections.FXCollections;
 import javafx.collections.ObservableList;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
-import javafx.scene.control.ListView;
+import javafx.scene.control.*;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.GridPane;
 import javafx.scene.layout.HBox;
@@ -17,8 +16,11 @@ import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.Stage;
 
+import java.sql.Timestamp;
 import java.util.HashMap;
 import java.util.Map;
+
+import static com.relevents.app.ui.GUISetup.getTextField;
 
 public class EventView extends Application {
 
@@ -40,7 +42,8 @@ public class EventView extends Application {
         GUISetup.setSceneTitle(grid, event.getEventName(), FontWeight.EXTRA_BOLD, 2);
         displayEventInfo(grid);
         displayEventAttendees(grid);
-        if (manager) { displayDeleteButton(primaryStage, grid);}
+        if (manager) { displayDeleteButton(primaryStage, grid); }
+        if (manager) { displayEditButton(primaryStage, grid); }
 //        displayUserTopics(grid);
 //        displayUserFollows(grid);
 
@@ -110,7 +113,56 @@ public class EventView extends Application {
             OrganizationView view = new OrganizationView(org, manager);
             view.start(primaryStage);
         });
-        grid.add(deleteEventBtn, 0, 7, 1, 1);
+        grid.add(deleteEventBtn, 1, 7, 1, 1);
+    }
+
+    private void displayEditButton(Stage primaryStage, GridPane grid) {
+        Button editEventBtn = new Button("Edit event");
+        editEventBtn.setOnAction(e -> {
+            editEventView(primaryStage);
+        });
+        grid.add(editEventBtn, 0, 7, 1, 1);
+    }
+
+    private void editEventView(Stage primaryStage) {
+        BorderPane root = new BorderPane();
+        GridPane grid = GUISetup.setNewGrid();
+        HBox hbButtons = GUISetup.navButtons(primaryStage);
+        root.setBottom(hbButtons);
+        root.setCenter(grid);
+        GUISetup.setSceneTitle(grid, event.getEventName(), FontWeight.EXTRA_BOLD, 2);
+
+        TextField nameTextField = getTextField(grid, "Name:", event.getEventName(), 1);
+        Label start = new Label("Start:");
+        grid.add(start, 0, 2,1,1);
+        DatePicker startDate = new DatePicker();
+        startDate.setValue(event.getEventStart().toLocalDateTime().toLocalDate());
+        grid.add(startDate, 1, 2, 1, 1);
+
+        Label end = new Label("End:");
+        grid.add(end, 0, 3,1,1);
+        DatePicker endDate = new DatePicker();
+        endDate.setValue(event.getEventEnd().toLocalDateTime().toLocalDate());
+        grid.add(endDate, 1, 3, 1, 1);
+
+        TextField websiteTextField = getTextField(grid, "Website:", event.getWebsite(),4);
+        TextField descriptionTextField = getTextField(grid, "Description:", event.getDescription(),5);
+
+        Button saveBtn = new Button("Save");
+        saveBtn.setOnAction(e -> {
+            Timestamp startTime = Timestamp.valueOf(startDate.getValue().atStartOfDay());
+            Timestamp endTime = Timestamp.valueOf(endDate.getValue().atStartOfDay());
+            Event updatedEvent = new Event(event.getEventID(), nameTextField.getText(), startTime, endTime,
+                    websiteTextField.getText(), descriptionTextField.getText(), 3, event.getOrganizationID());
+            ReleventsApp.getInstance().getDbHandler().updateEvent(updatedEvent.getEventID(), updatedEvent);
+            EventView view = new EventView(updatedEvent, true);
+            view.start(primaryStage);
+        });
+        grid.add(saveBtn, 0,6,1,1);
+        Scene scene = new Scene(root, 360, 640);
+        primaryStage.setTitle("RELEVENTS");
+        primaryStage.setScene(scene);
+        primaryStage.show();
     }
 
 }
