@@ -210,32 +210,20 @@ public class DatabaseConnectionHandler {
         return result.toArray(new Event[result.size()]);
     }
 
-    public Event[] earliestEvent(){
+    public Event nextUserEvent(String userEmail) {
         ArrayList<Event> result = new ArrayList<>();
-
         try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("select *\n" +
-                    "from Event\n" +
-                    "where EVENTSTART=(select min(EventStart) from Event)\n");
-
-            // get info on ResultSet
-            ResultSetMetaData rsmd = rs.getMetaData();
-
-            System.out.println(" ");
-
-            // display column names;
-            for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                // get column name and print it
-                System.out.printf("%-15s", rsmd.getColumnName(i + 1));
-            }
-
-            addEventToResult(result, stmt, rs);
+            PreparedStatement ps = connection.prepareStatement("select *\n" +
+                    "from Event, Attends\n" +
+                    "where EVENTSTART=(select min(EventStart) from Event)\n" +
+                    "and ATTENDS.EMAIL = ? and EVENT.EVENTID = ATTENDS.EVENTID");
+            ps.setString(1, userEmail);
+            ResultSet rs = ps.executeQuery();
+            addEventToResult(result, ps, rs);
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
-
-        return result.toArray(new Event[result.size()]);
+        return result.get(0);
     }
 
     private void addEventToResult(ArrayList<Event> result, Statement stmt, ResultSet rs) throws SQLException {
