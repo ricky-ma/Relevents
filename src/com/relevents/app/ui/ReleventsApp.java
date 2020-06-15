@@ -10,6 +10,8 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
 
+import java.util.Arrays;
+
 public class ReleventsApp extends Application {
 
     private static volatile ReleventsApp instance;
@@ -23,8 +25,8 @@ public class ReleventsApp extends Application {
 
     public void start(Stage primaryStage) {
 
-        // testing database connection
-        boolean didConnect = dbHandler.login("ora_rickyma", "a82943424");
+        // testing ricky.ma@alumni.ubc.caricky.ma@alumni.ubc.cadatabase connection
+        boolean didConnect = dbHandler.login("ora_brucecui", "a13412151");
         if (didConnect) {
 
 //            Timestamp t1 = new Timestamp(2020,6,20,14,0,0,0);
@@ -51,6 +53,8 @@ public class ReleventsApp extends Application {
 //            CityUser[] cityUserInfoTable = dbHandler.cityUsers();
 //            System.out.println(Arrays.toString(cityUserInfoTable));
 
+//            Event[] userEventTable = dbHandler.userEvents("ricky.ma@alumni.ubc.ca");
+//            System.out.println(Arrays.toString(userEventTable ));
         }
 
         ReleventsApp app = new ReleventsApp();
@@ -84,7 +88,7 @@ public class ReleventsApp extends Application {
     }
 
     public static ReleventsApp getInstance() {
-        if (instance == null ) {
+        if (instance == null) {
             instance = new ReleventsApp();
         }
         return instance;

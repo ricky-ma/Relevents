@@ -511,7 +511,7 @@ public class DatabaseConnectionHandler {
 
         try {
             PreparedStatement ps = connection.prepareStatement("SELECT E.EVENTID, E.EVENTNAME, E.EVENTSTART, E.EVENTEND, E.WEBSITE," +
-                    " E.DESCRIPTION, E.GOVERNINGID FROM EVENT E, APPUSER APP, ATTENDS A WHERE APP.EMAIL = ? " +
+                    " E.DESCRIPTION, E.GOVERNINGID,E.ORGANIZATIONID FROM EVENT E, APPUSER APP, ATTENDS A WHERE APP.EMAIL = ? " +
                     "AND APP.EMAIL = A.EMAIL AND A.EVENTID = E.EVENTID");
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
