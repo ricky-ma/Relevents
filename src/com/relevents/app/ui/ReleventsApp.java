@@ -31,7 +31,7 @@ public class ReleventsApp extends Application {
         // testing ricky.ma@alumni.ubc.caricky.ma@alumni.ubc.cadatabase connection
         if (dbHandler.getConnection() == null) {
             ReleventsApp app = new ReleventsApp();
-            app.getDbHandler().login("ora_brucecui", "a13412151");
+            app.getDbHandler().login("ora_rickyma", "a82943424");
             instance = app;
         }
 
