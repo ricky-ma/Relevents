@@ -2,9 +2,9 @@ package com.relevents.app.model;
 
 public class CityUser {
     private final String cityName;
-    private final int numUsers;
+    private final Integer numUsers;
 
-    public CityUser(String cityName,int numUsers){
+    public CityUser(String cityName,Integer numUsers){
         this.cityName = cityName;
         this.numUsers = numUsers;
     }
@@ -13,7 +13,7 @@ public class CityUser {
         return cityName;
     }
 
-    public int getNumUsers() {
+    public Integer getNumUsers() {
         return numUsers;
     }
 }

@@ -287,7 +287,7 @@ public class DatabaseConnectionHandler {
         return result.toArray(new Location[result.size()]);
     }
 
-    public CityUser[] cityUsers(){
+    public CityUser[] getCityUsers(){
         ArrayList<CityUser> result = new ArrayList<>();
 
         try {
@@ -410,16 +410,13 @@ public class DatabaseConnectionHandler {
     // retrieve users who attended all events
     public User[] usersAttendedAllEvents() {
         ArrayList<User> result = new ArrayList<>();
-
         try {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM APPUSER app WHERE NOT EXISTS ((SELECT E.EVENTID FROM " +
                     "EVENT E) MINUS (SELECT A.EVENTID FROM ATTENDS A WHERE A.EMAIL = APP.EMAIL))");
             // get info on ResultSet
             ResultSetMetaData rsmd = rs.getMetaData();
-
             System.out.println(" ");
-
             // display column names;
             for (int i = 0; i < rsmd.getColumnCount(); i++) {
                 // get column name and print it
@@ -430,7 +427,6 @@ public class DatabaseConnectionHandler {
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
-
         return result.toArray(new User[result.size()]);
     }
 
@@ -569,43 +565,5 @@ public class DatabaseConnectionHandler {
 
         rs.close();
         stmt.close();
-    }
-
-
-    public void databaseSetup() {
-        dropEventTableIfExists();
-
-        try {
-            Statement stmt = connection.createStatement();
-            stmt.executeUpdate("CREATE TABLE Event (eventID integer PRIMARY KEY, eventName varchar(50), eventStart timestamp, eventEnd timestamp, website varchar(50), description varchar(4000), governingID integer, FOREIGN KEY (governingID) REFERENCES GOVERNINGBODY)");
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-
-//        BranchModel branch1 = new BranchModel("123 Charming Ave", "Vancouver", 1, "First Branch", 1234567);
-//        insertEvent(branch1);
-//
-//        BranchModel branch2 = new BranchModel("123 Coco Ave", "Vancouver", 2, "Second Branch", 1234568);
-//        insertEvent(branch2);
-    }
-
-    private void dropEventTableIfExists() {
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("select table_name from user_tables");
-
-            while(rs.next()) {
-                if(rs.getString(1).toLowerCase().equals("event")) {
-                    stmt.execute("DROP TABLE event");
-                    break;
-                }
-            }
-
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
     }
 }
