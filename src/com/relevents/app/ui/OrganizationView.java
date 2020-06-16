@@ -135,7 +135,6 @@ public class OrganizationView extends Application {
         TextField websiteTextField = GUISetup.getTextField(grid, "Website:", "",4);
         TextField descriptionTextField = GUISetup.getTextField(grid, "Description:", "",5);
 
-
         Button addBtn = new Button("Add");
         addBtn.setOnAction(e -> {
             Timestamp startTime = Timestamp.valueOf(startDate.getValue().atStartOfDay());
