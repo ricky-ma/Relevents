@@ -4,6 +4,8 @@ import com.relevents.app.model.*;
 
 import java.sql.*;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
 
 /**
  * This class handles all database related transactions
@@ -33,7 +35,7 @@ public class DatabaseConnectionHandler {
     }
 
     private void rollbackConnection() {
-        try  {
+        try {
             connection.rollback();
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
@@ -100,16 +102,16 @@ public class DatabaseConnectionHandler {
             Statement stmt = connection.createStatement();
             ResultSet rs = stmt.executeQuery("SELECT * FROM Event");
 
-    		// get info on ResultSet
-    		ResultSetMetaData rsmd = rs.getMetaData();
+            // get info on ResultSet
+            ResultSetMetaData rsmd = rs.getMetaData();
 
-    		System.out.println(" ");
+            System.out.println(" ");
 
-    		// display column names;
-    		for (int i = 0; i < rsmd.getColumnCount(); i++) {
-    			// get column name and print it
-    			System.out.printf("%-15s", rsmd.getColumnName(i + 1));
-    		}
+            // display column names;
+            for (int i = 0; i < rsmd.getColumnCount(); i++) {
+                // get column name and print it
+                System.out.printf("%-15s", rsmd.getColumnName(i + 1));
+            }
 
             addEventToResult(result, stmt, rs);
         } catch (SQLException e) {
@@ -232,7 +234,7 @@ public class DatabaseConnectionHandler {
     }
 
     private void addEventToResult(ArrayList<Event> result, Statement stmt, ResultSet rs) throws SQLException {
-        while(rs.next()) {
+        while (rs.next()) {
             Event model = new Event(rs.getInt("eventID"),
                     rs.getString("eventName"),
                     rs.getTimestamp("eventStart"),
@@ -249,7 +251,7 @@ public class DatabaseConnectionHandler {
 
     // ---------------------------------------------LOCATION FUNCTIONS--------------------------------------------------
     // TODO
-    public Location[] getLocationInfo(){
+    public Location[] getLocationInfo() {
         ArrayList<Location> result = new ArrayList<>();
         try {
             Statement stmt = connection.createStatement();
@@ -268,7 +270,7 @@ public class DatabaseConnectionHandler {
             }
 
             //Integer locationID, String locationName, String unit, Integer houseNum, String street, Integer cityID
-            while(rs.next()) {
+            while (rs.next()) {
                 Location model = new Location(rs.getInt("locationID"),
                         rs.getString("locationName"),
                         rs.getString("unit"),
@@ -308,7 +310,7 @@ public class DatabaseConnectionHandler {
                 System.out.printf("%-15s", rsmd.getColumnName(i + 1));
             }
 
-            while(rs.next()) {
+            while (rs.next()) {
                 CityUser model = new CityUser(rs.getString("cityName"),
                         rs.getInt("numUsers"));
                 result.add(model);
@@ -323,6 +325,7 @@ public class DatabaseConnectionHandler {
         return result.toArray(new CityUser[result.size()]);
 
     }
+
     // ---------------------------------------------ORGANIZATION FUNCTIONS----------------------------------------------
     // TODO
     public Organization[] getOrganizationInfo() {
@@ -343,7 +346,7 @@ public class DatabaseConnectionHandler {
 
             }
 
-            while(rs.next()) {
+            while (rs.next()) {
                 Organization model = new Organization(rs.getInt("organizationID"),
                         rs.getString("orgName"),
                         rs.getString("description"),
@@ -392,7 +395,7 @@ public class DatabaseConnectionHandler {
     private void addOrgToResult(ArrayList<Organization> result, PreparedStatement ps) throws SQLException {
         ResultSet rs = ps.executeQuery();
 
-        while(rs.next()) {
+        while (rs.next()) {
             Organization model = new Organization(rs.getInt("organizationID"),
                     rs.getString("orgName"),
                     rs.getString("description"),
@@ -521,7 +524,7 @@ public class DatabaseConnectionHandler {
                     " WHERE APP.EMAIL = ? AND APP.EMAIL = P.EMAIL");
             ps.setString(1, email);
             ResultSet rs = ps.executeQuery();
-            while(rs.next()) {
+            while (rs.next()) {
                 result.add(rs.getString("TOPICNAME"));
             }
             rs.close();
@@ -553,7 +556,7 @@ public class DatabaseConnectionHandler {
     }
 
     private void addUserToResult(ArrayList<User> result, Statement stmt, ResultSet rs) throws SQLException {
-        while(rs.next()) {
+        while (rs.next()) {
             User model = new User(rs.getString("EMAIL"),
                     rs.getString("FNAME"),
                     rs.getString("LNAME"),
@@ -565,5 +568,31 @@ public class DatabaseConnectionHandler {
 
         rs.close();
         stmt.close();
+    }
+
+    
+
+    public ArrayList<ArrayList<String>> selectEventInfo(String columnNames) {
+        ArrayList<ArrayList<String>> outerList = new ArrayList<>();
+
+        try {
+            PreparedStatement ps = connection.prepareStatement("select " + columnNames + " from Event");
+            ResultSet rs = ps.executeQuery();
+            int columnsNumber = rs.getMetaData().getColumnCount();
+            while (rs.next()) {
+                ArrayList<String> innerList = new ArrayList<>();
+                for (int i = 1; i <= columnsNumber; i++) {
+                    innerList.add(rs.getString(i));
+                }
+                outerList.add(innerList);
+            }
+
+            rs.close();
+            ps.close();
+        } catch (SQLException e) {
+            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
+        }
+        return outerList;
+
     }
 }
