@@ -44,15 +44,15 @@ public class MeView extends Application {
     }
 
     private void displayUserInfo(GridPane grid) {
-        Text phone = new Text("PHONE: " + userInfo.getPhone());
-        phone.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
+        Text phone = new Text("Phone: " + userInfo.getPhone());
+        phone.setFont(Font.font("Helvetica", FontWeight.SEMI_BOLD, 15));
         // TODO: use cityID to get cityName
-        Text city = new Text("LOCATION: " + userInfo.getCityID());
-        city.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
-        Text birthdate = new Text("BIRTHDATE: " + userInfo.getBirthdate());
-        birthdate.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
-        Text email = new Text("EMAIL: " + userInfo.getEmail());
-        email.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
+        Text city = new Text("Location: " + userInfo.getCityID());
+        city.setFont(Font.font("Helvetica", FontWeight.SEMI_BOLD, 15));
+        Text birthdate = new Text("Birthdate: " + userInfo.getBirthdate());
+        birthdate.setFont(Font.font("Helvetica", FontWeight.SEMI_BOLD, 15));
+        Text email = new Text("Email: " + userInfo.getEmail());
+        email.setFont(Font.font("Helvetica", FontWeight.SEMI_BOLD, 15));
 
         grid.add(phone, 0, 1, 2, 1);
         grid.add(city, 0, 2, 2, 1);
@@ -78,7 +78,7 @@ public class MeView extends Application {
         list.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> OrganizationView.view(primaryStage, newValue, orgMap, true));
 
-        Text myOrganizations = new Text("MY ORGANIZATIONS");
+        Text myOrganizations = new Text("My Organizations");
         myOrganizations.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
         grid.add(myOrganizations, 0, 5, 2, 1);
         grid.add(list, 0, 6, 2, 1);
@@ -90,7 +90,7 @@ public class MeView extends Application {
         ObservableList<String> items = FXCollections.observableArrayList(userTopics);
         list.setItems(items);
 
-        Text myOrganizations = new Text("MY INTERESTS");
+        Text myOrganizations = new Text("My Interests");
         myOrganizations.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
         grid.add(myOrganizations, 0, 7, 2, 1);
         grid.add(list, 0, 8, 2, 1);
@@ -106,7 +106,7 @@ public class MeView extends Application {
         ObservableList<String> items = FXCollections.observableArrayList(orgNames);
         list.setItems(items);
 
-        Text myOrganizations = new Text("FOLLOWING");
+        Text myOrganizations = new Text("Following");
         myOrganizations.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
         grid.add(myOrganizations, 0, 9, 2, 1);
         grid.add(list, 0, 10, 2, 1);

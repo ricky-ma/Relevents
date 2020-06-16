@@ -71,14 +71,14 @@ public class EventView extends Application {
     }
 
     private void displayEventInfo(GridPane grid) {
-        Text start = new Text("START: " + event.getEventStart());
-        start.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
-        Text end = new Text("END: " + event.getEventEnd());
-        end.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
-        Text website = new Text("WEBSITE: " + event.getWebsite());
-        website.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
-        Text description = new Text("DESCRIPTION: " + event.getDescription());
-        description.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
+        Text start = new Text("Start: " + event.getEventStart());
+        start.setFont(Font.font("Helvetica", FontWeight.SEMI_BOLD, 15));
+        Text end = new Text("End: " + event.getEventEnd());
+        end.setFont(Font.font("Helvetica", FontWeight.SEMI_BOLD, 15));
+        Text website = new Text("Website: " + event.getWebsite());
+        website.setFont(Font.font("Helvetica", FontWeight.SEMI_BOLD, 15));
+        Text description = new Text("Description: " + event.getDescription());
+        description.setFont(Font.font("Helvetica", FontWeight.SEMI_BOLD, 15));
 
         grid.add(start, 0, 1, 2, 1);
         grid.add(end, 0, 2, 2, 1);
@@ -99,7 +99,7 @@ public class EventView extends Application {
         ObservableList<String> items = FXCollections.observableArrayList(userMap.values());
         list.setItems(items);
 
-        Text myOrganizations = new Text("ATTENDEES");
+        Text myOrganizations = new Text("Attendees");
         myOrganizations.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
         grid.add(myOrganizations, 0, 5, 2, 1);
         grid.add(list, 0, 6, 2, 1);

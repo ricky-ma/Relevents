@@ -72,12 +72,12 @@ public class OrganizationView extends Application {
     }
 
     private void displayOrganizationInfo(GridPane grid) {
-        Text description = new Text("DESCRIPTION: " + organization.getDescription());
-        description.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
-        Text email = new Text("EMAIL: " + organization.getEmail());
-        email.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
-        Text website = new Text("WEBSITE: " + organization.getWebsite());
-        website.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
+        Text description = new Text("Description: " + organization.getDescription());
+        description.setFont(Font.font("Helvetica", FontWeight.SEMI_BOLD, 15));
+        Text email = new Text("Email: " + organization.getEmail());
+        email.setFont(Font.font("Helvetica", FontWeight.SEMI_BOLD, 15));
+        Text website = new Text("Website: " + organization.getWebsite());
+        website.setFont(Font.font("Helvetica", FontWeight.SEMI_BOLD, 15));
 
         grid.add(description, 0, 1, 2, 1);
         grid.add(email, 0, 2, 2, 1);
@@ -101,7 +101,7 @@ public class OrganizationView extends Application {
         list.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldValue, newValue) -> EventView.view(primaryStage, newValue, eventMap, manager));
 
-        Text myOrganizations = new Text("EVENTS");
+        Text myOrganizations = new Text("Events");
         myOrganizations.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
         grid.add(myOrganizations, 0, 4, 2, 1);
         grid.add(list, 0, 5, 2, 1);
@@ -167,7 +167,7 @@ public class OrganizationView extends Application {
         HBox hbButtons = GUISetup.navButtons(primaryStage);
         root.setBottom(hbButtons);
         root.setCenter(grid);
-        GUISetup.setSceneTitle(grid, "ANALYTICS", FontWeight.EXTRA_BOLD, 2);
+        GUISetup.setSceneTitle(grid, "Analytics", FontWeight.EXTRA_BOLD, 2);
 
         Text title1 = new Text("Number of users per city");
         title1.setFont(Font.font("Helvetica", FontWeight.BOLD, 20));

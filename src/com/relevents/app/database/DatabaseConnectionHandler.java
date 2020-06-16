@@ -47,7 +47,6 @@ public class DatabaseConnectionHandler {
             }
 
             connection = DriverManager.getConnection(ORACLE_URL, username, password);
-            System.out.println("here");
             connection.setAutoCommit(false);
 
             System.out.println("\nConnected to Oracle!");

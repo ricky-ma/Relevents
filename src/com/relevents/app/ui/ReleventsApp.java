@@ -72,13 +72,13 @@ public class ReleventsApp extends Application {
 
         Text eventName = new Text(nextEvent.getEventName());
         eventName.setFont(Font.font("Helvetica", FontWeight.BOLD, 15));
-        Text start = new Text("START: " + nextEvent.getEventStart());
+        Text start = new Text("Start: " + nextEvent.getEventStart());
         start.setFont(Font.font("Helvetica", FontWeight.SEMI_BOLD, 15));
-        Text end = new Text("END: " + nextEvent.getEventEnd());
+        Text end = new Text("End: " + nextEvent.getEventEnd());
         end.setFont(Font.font("Helvetica", FontWeight.SEMI_BOLD, 15));
-        Text website = new Text("WEBSITE: " + nextEvent.getWebsite());
+        Text website = new Text("Website: " + nextEvent.getWebsite());
         website.setFont(Font.font("Helvetica", FontWeight.SEMI_BOLD, 15));
-        Text description = new Text("DESCRIPTION: " + nextEvent.getDescription());
+        Text description = new Text("Description: " + nextEvent.getDescription());
         description.setFont(Font.font("Helvetica", FontWeight.SEMI_BOLD, 15));
 
         grid.add(eventName, 0, 1, 2, 1);
@@ -99,7 +99,7 @@ public class ReleventsApp extends Application {
         list.setItems(items);
 
         Text myEvents = new Text("My Events");
-        myEvents.setFont(Font.font("Helvetica", FontWeight.BOLD, 25));
+        myEvents.setFont(Font.font("Helvetica", FontWeight.BOLD, 30));
         grid.add(myEvents, 0, 6, 2, 1);
         grid.add(list, 0, 7, 2, 1);
     }
