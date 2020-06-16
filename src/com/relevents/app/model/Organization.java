@@ -1,7 +1,5 @@
 package com.relevents.app.model;
 
-import java.util.ArrayList;
-
 public class Organization {
 
     private final Integer organizationID;
@@ -9,8 +7,6 @@ public class Organization {
     private final String description;
     private final String email;
     private final String website;
-
-    public ArrayList<Event> hosting;
 
     public Organization(Integer organizationID, String orgName, String description, String email, String website) {
         this.organizationID = organizationID;

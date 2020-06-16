@@ -118,9 +118,7 @@ public class EventView extends Application {
 
     private void displayEditButton(Stage primaryStage, GridPane grid) {
         Button editEventBtn = new Button("Edit event");
-        editEventBtn.setOnAction(e -> {
-            editEventView(primaryStage);
-        });
+        editEventBtn.setOnAction(e -> editEventView(primaryStage));
         grid.add(editEventBtn, 0, 7, 1, 1);
     }
 

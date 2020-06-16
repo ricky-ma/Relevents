@@ -9,11 +9,6 @@ public class Location {
     private final String street;
     private final Integer cityID;
 
-    private String cityname;
-    private String stateProvince;
-    private String country;
-    private String postalcode;
-
     public Location(Integer locationID, String locationName, String unit, Integer houseNum, String street, Integer cityID) {
         this.locationID = locationID;
         this.locationName = locationName;
@@ -47,19 +42,4 @@ public class Location {
         return cityID;
     }
 
-    public String getCityname() {
-        return cityname;
-    }
-
-    public String getStateProvince() {
-        return stateProvince;
-    }
-
-    public String getCountry() {
-        return country;
-    }
-
-    public String getPostalcode() {
-        return postalcode;
-    }
 }

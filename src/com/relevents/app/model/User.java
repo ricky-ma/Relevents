@@ -1,7 +1,6 @@
 package com.relevents.app.model;
 
 import java.sql.Date;
-import java.util.ArrayList;
 
 public class User {
 
@@ -11,11 +10,6 @@ public class User {
     private final Date birthdate;
     private final String phone;
     private final Integer cityID;
-
-    public ArrayList<Organization> following;
-    public ArrayList<Event> managing;
-    public ArrayList<String> topicPreferences;
-    public ArrayList<Event> attending;
 
     public User(String email, String fname, String lname, Date birthdate, String phone, Integer cityID) {
         this.email = email;

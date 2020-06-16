@@ -4,8 +4,6 @@ import com.relevents.app.model.*;
 
 import java.sql.*;
 import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
 
 /**
  * This class handles all database related transactions
@@ -42,7 +40,7 @@ public class DatabaseConnectionHandler {
         }
     }
 
-    public boolean login(String username, String password) {
+    public void login(String username, String password) {
         try {
             if (connection != null) {
                 connection.close();
@@ -53,18 +51,6 @@ public class DatabaseConnectionHandler {
             connection.setAutoCommit(false);
 
             System.out.println("\nConnected to Oracle!");
-            return true;
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-            return false;
-        }
-    }
-
-    public void close() {
-        try {
-            if (connection != null) {
-                connection.close();
-            }
         } catch (SQLException e) {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
         }
@@ -93,32 +79,6 @@ public class DatabaseConnectionHandler {
             System.out.println(EXCEPTION_TAG + " " + e.getMessage());
             rollbackConnection();
         }
-    }
-
-    public Event[] getEventInfo() {
-        ArrayList<Event> result = new ArrayList<>();
-
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Event");
-
-            // get info on ResultSet
-            ResultSetMetaData rsmd = rs.getMetaData();
-
-            System.out.println(" ");
-
-            // display column names;
-            for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                // get column name and print it
-                System.out.printf("%-15s", rsmd.getColumnName(i + 1));
-            }
-
-            addEventToResult(result, stmt, rs);
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-
-        return result.toArray(new Event[result.size()]);
     }
 
     public Event getOneEventInfo(Integer eventID) {
@@ -180,21 +140,6 @@ public class DatabaseConnectionHandler {
         }
     }
 
-    public Event[] sortEventsByDate() {
-        ArrayList<Event> result = new ArrayList<>();
-
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Event ORDER BY Eventstart DESC");
-
-            addEventToResult(result, stmt, rs);
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-
-        return result.toArray(new Event[result.size()]);
-    }
-
     // select event that has "something" in its name or "something" in topicname
     public Event[] searchEventsByKeyword(String keyword) {
         ArrayList<Event> result = new ArrayList<>();
@@ -250,45 +195,6 @@ public class DatabaseConnectionHandler {
     }
 
     // ---------------------------------------------LOCATION FUNCTIONS--------------------------------------------------
-    // TODO
-    public Location[] getLocationInfo() {
-        ArrayList<Location> result = new ArrayList<>();
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM Location");
-
-            // get info on ResultSet
-            ResultSetMetaData rsmd = rs.getMetaData();
-
-            System.out.println(" ");
-
-            // display column names;
-            for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                // get column name and print it
-                System.out.printf("%-15s", rsmd.getColumnName(i + 1));
-
-            }
-
-            //Integer locationID, String locationName, String unit, Integer houseNum, String street, Integer cityID
-            while (rs.next()) {
-                Location model = new Location(rs.getInt("locationID"),
-                        rs.getString("locationName"),
-                        rs.getString("unit"),
-                        rs.getInt("houseNum"),
-                        rs.getString("street"),
-                        rs.getInt("cityID"));
-                result.add(model);
-            }
-
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-
-        return result.toArray(new Location[result.size()]);
-    }
-
     public CityUser[] getCityUsers(){
         ArrayList<CityUser> result = new ArrayList<>();
 
@@ -327,43 +233,6 @@ public class DatabaseConnectionHandler {
     }
 
     // ---------------------------------------------ORGANIZATION FUNCTIONS----------------------------------------------
-    // TODO
-    public Organization[] getOrganizationInfo() {
-        ArrayList<Organization> result = new ArrayList<>();
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM ORGANIZATION");
-
-            // get info on ResultSet
-            ResultSetMetaData rsmd = rs.getMetaData();
-
-            System.out.println(" ");
-
-            // display column names;
-            for (int i = 0; i < rsmd.getColumnCount(); i++) {
-                // get column name and print it
-                System.out.printf("%-15s", rsmd.getColumnName(i + 1));
-
-            }
-
-            while (rs.next()) {
-                Organization model = new Organization(rs.getInt("organizationID"),
-                        rs.getString("orgName"),
-                        rs.getString("description"),
-                        rs.getString("email"),
-                        rs.getString("website"));
-                result.add(model);
-            }
-
-            rs.close();
-            stmt.close();
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-
-        return result.toArray(new Organization[result.size()]);
-    }
-
     public Organization getOneOrgInfo(Integer orgID) {
         ArrayList<Organization> result = new ArrayList<>();
         try {
@@ -409,7 +278,6 @@ public class DatabaseConnectionHandler {
     }
 
     // ---------------------------------------------USER FUNCTIONS------------------------------------------------------
-    // TODO
     // retrieve users who attended all events
     public User[] usersAttendedAllEvents() {
         ArrayList<User> result = new ArrayList<>();
@@ -446,21 +314,6 @@ public class DatabaseConnectionHandler {
         }
 
         return result.get(0);
-    }
-
-    public User[] getUserInfo() {
-        ArrayList<User> result = new ArrayList<>();
-
-        try {
-            Statement stmt = connection.createStatement();
-            ResultSet rs = stmt.executeQuery("SELECT * FROM APPUSER");
-
-            addUserToResult(result, stmt, rs);
-        } catch (SQLException e) {
-            System.out.println(EXCEPTION_TAG + " " + e.getMessage());
-        }
-
-        return result.toArray(new User[result.size()]);
     }
 
     // retrieve all organizations a user manages
@@ -569,8 +422,6 @@ public class DatabaseConnectionHandler {
         rs.close();
         stmt.close();
     }
-
-    
 
     public ArrayList<ArrayList<String>> selectEventInfo(String columnNames) {
         ArrayList<ArrayList<String>> outerList = new ArrayList<>();

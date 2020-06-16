@@ -157,6 +157,7 @@ public class OrganizationView extends Application {
         grid.add(analytics, 1, 6, 1, 1);
     }
 
+    @SuppressWarnings("unchecked")
     private void analyticsView(Stage primaryStage) {
         CityUser[] cityUsers = ReleventsApp.getInstance().getDbHandler().getCityUsers();
         User[] veryActiveUsers = ReleventsApp.getInstance().getDbHandler().usersAttendedAllEvents();

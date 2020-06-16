@@ -1,10 +1,6 @@
 package com.relevents.app.model;
 
-import org.javatuples.Quartet;
-import org.javatuples.Triplet;
-
 import java.sql.Timestamp;
-import java.util.ArrayList;
 
 /**
  * The intent for this class is to update/store information about a single event
@@ -24,13 +20,6 @@ public class Event {
     }
 
     private final Integer organizationID;
-
-    public ArrayList<Triplet<Integer, String, String>> FAQs;
-    public ArrayList<Quartet<Integer, String, String, String>> foods;
-    public Quartet<Integer, String, String, String> governingBody;
-    public ArrayList<User> attendees;
-    public ArrayList<String> topics;
-    public Location location;
 
     public Event(Integer eventID, String eventName, Timestamp eventStart, Timestamp eventEnd, String website, String description, Integer governingID, Integer organizationID) {
         this.eventID = eventID;
