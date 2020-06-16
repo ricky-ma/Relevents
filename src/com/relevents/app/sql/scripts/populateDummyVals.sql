@@ -139,10 +139,16 @@ INSERT INTO MANAGES (EMAIL, ORGANIZATIONID, EVENTID)
 INSERT INTO ATTENDS (EMAIL, EVENTID)
     WITH names (EMAIL, EVENTID) AS (
         SELECT 'ricky.ma@alumni.ubc.ca', 1 FROM dual UNION ALL
+        SELECT 'ricky.ma@alumni.ubc.ca', 2 FROM dual UNION ALL
+        SELECT 'ricky.ma@alumni.ubc.ca', 3 FROM dual UNION ALL
+        SELECT 'ricky.ma@alumni.ubc.ca', 4 FROM dual UNION ALL
+        SELECT 'ricky.ma@alumni.ubc.ca', 5 FROM dual UNION ALL
+
         SELECT 'johnny@hotmail.com', 2 FROM dual UNION ALL
         SELECT 'painting101@gmail.com', 3 FROM dual UNION ALL
         SELECT 'bonappetit@yum.com', 4 FROM dual UNION ALL
         SELECT 'will@smith.com', 5 FROM dual
+
     )
     SELECT * FROM names;
 
